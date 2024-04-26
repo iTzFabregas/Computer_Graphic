@@ -222,47 +222,47 @@ textures_coord_list = []
 
 
 ### Vamos carregar cada modelo e definir funções para desenhá-los
-modelo = load.load_model_from_file('objects/caixa/caixa.obj')
+modelo = load.load_model_from_file('../objects/caixa/caixa.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/terreno/terreno2.obj')
+modelo = load.load_model_from_file('../objects/terreno/terreno2.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/casa/casa.obj')
+modelo = load.load_model_from_file('../objects/casa/casa.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/monstro/monstro.obj')
+modelo = load.load_model_from_file('../objects/monstro/monstro.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/sky/sky.obj')
+modelo = load.load_model_from_file('../objects/sky/sky.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/spiderman/spiderman.obj')
+modelo = load.load_model_from_file('../objects/spiderman/spiderman.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/tanks/tanks.obj')
+modelo = load.load_model_from_file('../objects/tanks/tanks.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/terreno2/terreno2.obj')
+modelo = load.load_model_from_file('../objects/terreno2/terreno2.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('objects/arvore/arvore10.obj')
+modelo = load.load_model_from_file('../objects/arvore/arvore10.obj')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 
 
 ### Load nas texturas
-load.load_texture_from_file(0,'objects/caixa/caixa2.jpg')
-load.load_texture_from_file(1,'objects/terreno/pedra.jpg')
-load.load_texture_from_file(2,'objects/casa/casa.jpg')
-load.load_texture_from_file(3,'objects/monstro/monstro.jpg')
-load.load_texture_from_file(4,'objects/sky/sky.png')
-load.load_texture_from_file(5,'objects/spiderman/spiderman.png')
-load.load_texture_from_file(6,'objects/tanks/tanks.jpg')
-load.load_texture_from_file(7,'objects/terreno2/terreno3.png')
-load.load_texture_from_file(8,'objects/arvore/bark_0021.jpg')
-load.load_texture_from_file(9,'objects/arvore/DB2X2_L01.png')
-load.load_texture_from_file(10,'objects/terreno/grama.jpg')
+load.load_texture_from_file(0,'../objects/caixa/caixa2.jpg')
+load.load_texture_from_file(1,'../objects/terreno/pedra.jpg')
+load.load_texture_from_file(2,'../objects/casa/casa.jpg')
+load.load_texture_from_file(3,'../objects/monstro/monstro.jpg')
+load.load_texture_from_file(4,'../objects/sky/sky.png')
+load.load_texture_from_file(5,'../objects/spiderman/spiderman.png')
+load.load_texture_from_file(6,'../objects/tanks/tanks.jpg')
+load.load_texture_from_file(7,'../objects/terreno2/terreno3.png')
+load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg')
+load.load_texture_from_file(9,'../objects/arvore/DB2X2_L01.png')
+load.load_texture_from_file(10,'../objects/terreno/grama.jpg')
 
 
 ### Para enviar nossos dados da CPU para a GPU, precisamos requisitar slots.

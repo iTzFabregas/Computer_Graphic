@@ -77,7 +77,7 @@ def mouse_event(window, xpos, ypos):
 
 ### Matrizes Model, View e Projection
 # Teremos uma aula específica para entender o seu funcionamento.
-def model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z):
+def model(angle, matrix):
     
     angle = math.radians(angle)
     
@@ -85,13 +85,13 @@ def model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z):
 
     
     # aplicando translacao
-    matrix_transform = glm.translate(matrix_transform, glm.vec3(t_x, t_y, t_z))    
+    matrix_transform = glm.translate(matrix_transform, glm.vec3(matriz.t[0], matriz.t[1], matriz.t[2]))
     
     # aplicando rotacao
-    matrix_transform = glm.rotate(matrix_transform, angle, glm.vec3(r_x, r_y, r_z))
+    matrix_transform = glm.rotate(matrix_transform, angle, glm.vec3(matriz.r[0], matriz.r[1], matriz.r[2]))
     
     # aplicando escala
-    matrix_transform = glm.scale(matrix_transform, glm.vec3(s_x, s_y, s_z))
+    matrix_transform = glm.scale(matrix_transform, glm.vec3(matriz.s[0], matriz.s[1], matriz.s[2]))
     
     matrix_transform = np.array(matrix_transform) # pegando a transposta da matriz (glm trabalha com ela invertida)
     
@@ -349,7 +349,7 @@ glfw.set_cursor_pos(window, lastX, lastY)
 # Enquanto a janela não for fechada, esse laço será executado. É neste espaço que trabalhamos com algumas interações com a OpenGL.
 glEnable(GL_DEPTH_TEST) ### importante para 3D
    
-rotacao_inc = 0
+inc = 0
 while not glfw.window_should_close(window):
 
     glfw.poll_events() 
@@ -363,16 +363,64 @@ while not glfw.window_should_close(window):
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
     
 
-    rotacao_inc += 0.01
+    inc += 0.01
+    matriz = MatrizTRS()
+
+    matriz.change_All(
+                [0.0, -0.9, 0,0], 
+                [0.0, 0.0, 1.0], 
+                [2.0, 1.0, 200.0])
+    desenhos.desenha_terreno_pedra(model, program, matriz)
+
+
+    matriz.change_All(
+                [4.0, -1.0, 0,0], 
+                [0.0, 0.0, 1.0], 
+                [100.0, 100.0, 100.0])
+    desenhos.desenha_terreno_grama(model, program, matriz)
+
+
+    matriz.change_All(
+                [0.0, 0.0, 0,0], 
+                [0.0, 1.0, 0.0], 
+                [3.0, 3.0, 3.0])
+    desenhos.desenha_sky(model, program, matriz, inc)
+
+
+    matriz.change_All(
+                [-30.0, -1.0, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+    desenhos.desenha_casa(model, program, matriz)
+
+
+    matriz.change_All(
+                [-5.0, -0.9, 30.0],
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+    desenhos.desenha_spiderman(model, program, matriz)
+
+
+    matriz.change_All(
+                [50.0, 0.0, (0.0+inc)], 
+                [1.0, 0.0, 0.0], 
+                [1.0, 1.0, 1.0])
+    desenhos.desenha_tanks(model, program, matriz)
     
-    desenhos.desenha_terreno_pedra(model, program)
-    desenhos.desenha_terreno_grama(model, program)
-    desenhos.desenha_sky(model, program, rotacao_inc)
-    desenhos.desenha_casa(model, program)
-    desenhos.desenha_spiderman(model, program)
-    desenhos.desenha_tanks(model, program, rotacao_inc)
-    desenhos.desenha_arvore1(model, program)
-    desenhos.desenha_arvore2(model, program)
+
+    matriz.change_All(
+                [-10.0, -1.0, 0.0],
+                [0.0, 0.0, 1.0], 
+                [7.0, 7.0, 7.0])
+    for i in range(6):
+
+        inicial = matriz.t[2] 
+        matriz.change_T([matriz.t[0], matriz.t[1], i*20])
+        desenhos.desenha_arvore1(model, program, matriz)
+
+        matriz.change_T([matriz.t[0], matriz.t[1], i*(-20)])
+        desenhos.desenha_arvore1(model, program, matriz)
+
     # desenha_terreno2()
     # desenha_monstro(rotacao_inc)
     

@@ -26,7 +26,6 @@ def load_texture_from_file(texture_id, img_textura):
     #image_data = np.array(list(img.getdata()), np.uint8)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 
-
 def load_model_from_file(filename):
 
     """Loads a Wavefront OBJ file. """
@@ -79,7 +78,7 @@ def load_model_from_file(filename):
 def processando_modelo(modelo, vertices_list, textures_coord_list):
 
     ### inserindo vertices do modelo no vetor de vertices
-    print('Processando modelo arvore.obj. Vertice inicial:',len(vertices_list))
+    print('Vertice inicial:',len(vertices_list))
     # faces_visited = []
     for face in modelo['faces']:
         # if face[2] not in faces_visited:
@@ -89,5 +88,5 @@ def processando_modelo(modelo, vertices_list, textures_coord_list):
             vertices_list.append( modelo['vertices'][vertice_id-1] )
         for texture_id in face[1]:
             textures_coord_list.append( modelo['texture'][texture_id-1] )
-    print('Processando modelo arvore.obj. Vertice final:',len(vertices_list))
+    print('Vertice final:',len(vertices_list), end="\n\n")
 

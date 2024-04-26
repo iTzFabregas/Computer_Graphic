@@ -8,7 +8,7 @@ import load
 
 qtd_texturas = 11
 altura = 1600
-largura = 1200
+largura = 1900
 
 
 ### Eventos para modificar a posição da câmera.
@@ -26,7 +26,7 @@ def key_event(window,key,scancode,action,mods):
         
     
         
-    cameraSpeed = 0.2
+    cameraSpeed = 1
     if key == 87 and (action==1 or action==2): # tecla W
         cameraPos += cameraSpeed * cameraFront
     
@@ -109,8 +109,6 @@ def projection():
     mat_projection = glm.perspective(glm.radians(45.0), largura/altura, 0.1, 1000.0)
     mat_projection = np.array(mat_projection)    
     return mat_projection
-
-
 
 
 ### Inicializando janela
@@ -223,30 +221,39 @@ textures_coord_list = []
 
 ### Vamos carregar cada modelo e definir funções para desenhá-los
 modelo = load.load_model_from_file('../objects/caixa/caixa.obj')
+print('Processando modelo: caixas')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('../objects/terreno/terreno2.obj')
+modelo = load.load_model_from_file('../objects/terreno/terreno.obj')
+print('Processando modelo: terreno')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/casa/casa.obj')
+print('Processando modelo: casa')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/monstro/monstro.obj')
+print('Processando modelo: monstro')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/sky/sky.obj')
+print('Processando modelo: sky')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/spiderman/spiderman.obj')
+print('Processando modelo: spiderman')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/tanks/tanks.obj')
+print('Processando modelo: tanks')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 modelo = load.load_model_from_file('../objects/terreno2/terreno2.obj')
+print('Processando modelo: terreno2')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
-modelo = load.load_model_from_file('../objects/arvore/arvore10.obj')
+modelo = load.load_model_from_file('../objects/arvore/arvore.obj')
+print('Processando modelo: arvore')
 load.processando_modelo(modelo, vertices_list, textures_coord_list)
 
 
@@ -356,17 +363,18 @@ while not glfw.window_should_close(window):
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
     
 
-    rotacao_inc += 0.1
+    rotacao_inc += 0.01
     
     desenhos.desenha_terreno_pedra(model, program)
     desenhos.desenha_terreno_grama(model, program)
     desenhos.desenha_sky(model, program, rotacao_inc)
     desenhos.desenha_casa(model, program)
-    # desenha_monstro(rotacao_inc)
-    # desenha_spiderman()
-    # desenha_tanks(rotacao_inc)
+    desenhos.desenha_spiderman(model, program)
+    desenhos.desenha_tanks(model, program, rotacao_inc)
+    desenhos.desenha_arvore1(model, program)
+    desenhos.desenha_arvore2(model, program)
     # desenha_terreno2()
-    # desenha_arvore()
+    # desenha_monstro(rotacao_inc)
     
     mat_view = view()
     loc_view = glGetUniformLocation(program, "view")

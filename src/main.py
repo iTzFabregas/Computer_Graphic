@@ -2,9 +2,7 @@
 # coding: utf-8
 
 from globals import *
-
-import desenhos
-import load
+from sprites import Object
 
 qtd_texturas = 11
 altura = 1600
@@ -77,7 +75,7 @@ def mouse_event(window, xpos, ypos):
 
 ### Matrizes Model, View e Projection
 # Teremos uma aula específica para entender o seu funcionamento.
-def model(angle, matrix):
+def model(angle, matriz):
     
     angle = math.radians(angle)
     
@@ -213,63 +211,22 @@ textures = glGenTextures(qtd_texturas)
 
 
 
-### A lista abaixo armazena todos os vertices carregados dos arquivos
-vertices_list = []    
-textures_coord_list = []
-
-
-
 ### Vamos carregar cada modelo e definir funções para desenhá-los
-modelo = load.load_model_from_file('../objects/caixa/caixa.obj')
-print('Processando modelo: caixas')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
+caixa = Object('../objects/caixa/caixa.obj', '../objects/caixa/caixa2.jpg', 0)
+terreno_pedra = Object('../objects/terreno/terreno.obj', '../objects/terreno/pedra.jpg', 1)
+casa = Object('../objects/casa/casa.obj', '../objects/casa/casa.jpg', 2)
+terreno_grama = Object('../objects/terreno/terreno.obj', '../objects/terreno/grama.jpg', 3)
+sky = Object('../objects/sky/sky.obj', '../objects/sky/sky.png', 4)
+spiderman = Object('../objects/spiderman/spiderman.obj', '../objects/spiderman/spiderman.png', 5)
+tanks = Object('../objects/tanks/tanks.obj', '../objects/tanks/tanks.jpg', 6)
 
-modelo = load.load_model_from_file('../objects/terreno/terreno.obj')
-print('Processando modelo: terreno')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
+# arvore = Object('../objects/arvore/arvore.obj', '../objects/arvore/bark_0021.jpg', 7) # TEM UM TRONCO E FOLHA
+# load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg') # TRONCO
+# load.load_texture_from_file(7,'../objects/arvore/DB2X2_L01.png') # FOLHA
 
-modelo = load.load_model_from_file('../objects/casa/casa.obj')
-print('Processando modelo: casa')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
+terreno2 = Object('../objects/terreno2/terreno2.obj', '../objects/terreno2/terreno3.png', 9)
+monstro = Object('../objects/monstro/monstro.obj', '../objects/monstro/monstro.jpg', 10)
 
-modelo = load.load_model_from_file('../objects/monstro/monstro.obj')
-print('Processando modelo: monstro')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-modelo = load.load_model_from_file('../objects/sky/sky.obj')
-print('Processando modelo: sky')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-modelo = load.load_model_from_file('../objects/spiderman/spiderman.obj')
-print('Processando modelo: spiderman')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-modelo = load.load_model_from_file('../objects/tanks/tanks.obj')
-print('Processando modelo: tanks')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-modelo = load.load_model_from_file('../objects/terreno2/terreno2.obj')
-print('Processando modelo: terreno2')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-modelo = load.load_model_from_file('../objects/arvore/arvore.obj')
-print('Processando modelo: arvore')
-load.processando_modelo(modelo, vertices_list, textures_coord_list)
-
-
-
-### Load nas texturas
-load.load_texture_from_file(0,'../objects/caixa/caixa2.jpg')
-load.load_texture_from_file(1,'../objects/terreno/pedra.jpg')
-load.load_texture_from_file(2,'../objects/casa/casa.jpg')
-load.load_texture_from_file(3,'../objects/monstro/monstro.jpg')
-load.load_texture_from_file(4,'../objects/sky/sky.png')
-load.load_texture_from_file(5,'../objects/spiderman/spiderman.png')
-load.load_texture_from_file(6,'../objects/tanks/tanks.jpg')
-load.load_texture_from_file(7,'../objects/terreno2/terreno3.png')
-load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg')
-load.load_texture_from_file(9,'../objects/arvore/DB2X2_L01.png')
-load.load_texture_from_file(10,'../objects/terreno/grama.jpg')
 
 
 ### Para enviar nossos dados da CPU para a GPU, precisamos requisitar slots.
@@ -364,65 +321,65 @@ while not glfw.window_should_close(window):
     
 
     inc += 0.01
-    matriz = MatrizTRS()
-
-    matriz.change_All(
+    terreno_pedra.matriz.change_All(
                 [0.0, -0.9, 0,0], 
                 [0.0, 0.0, 1.0], 
-                [2.0, 1.0, 200.0])
-    desenhos.desenha_terreno_pedra(model, program, matriz)
+                [2.0, 1.0, 100.0])
+    terreno_pedra.desenha(model, program)
 
 
-    matriz.change_All(
+    terreno_grama.matriz.change_All(
                 [4.0, -1.0, 0,0], 
                 [0.0, 0.0, 1.0], 
                 [100.0, 100.0, 100.0])
-    desenhos.desenha_terreno_grama(model, program, matriz)
+    terreno_grama.desenha(model, program)
 
 
-    matriz.change_All(
+    sky.matriz.change_All(
                 [0.0, 0.0, 0,0], 
                 [0.0, 1.0, 0.0], 
                 [3.0, 3.0, 3.0])
-    desenhos.desenha_sky(model, program, matriz, inc)
+    sky.change_Angle(inc) # UMA HORA VAI QUEBRAR, VAI ESTOURAR
+    sky.desenha(model, program)
 
 
-    matriz.change_All(
+    casa.matriz.change_All(
                 [-30.0, -1.0, 30.0], 
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
-    desenhos.desenha_casa(model, program, matriz)
+    casa.change_Angle(180)
+    casa.desenha(model, program)
 
 
-    matriz.change_All(
+    spiderman.matriz.change_All(
                 [-5.0, -0.9, 30.0],
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
-    desenhos.desenha_spiderman(model, program, matriz)
+    spiderman.change_Angle(90)
+    spiderman.desenha(model, program)
 
 
-    matriz.change_All(
+    tanks.matriz.change_All(
                 [50.0, 0.0, (0.0+inc)], 
                 [1.0, 0.0, 0.0], 
                 [1.0, 1.0, 1.0])
-    desenhos.desenha_tanks(model, program, matriz)
+    tanks.change_Angle(-90)
+    tanks.desenha(model, program)
     
 
-    matriz.change_All(
-                [-10.0, -1.0, 0.0],
-                [0.0, 0.0, 1.0], 
-                [7.0, 7.0, 7.0])
-    for i in range(6):
+    # matriz.change_All(
+    #             [-10.0, -1.0, 0.0],
+    #             [0.0, 0.0, 1.0], 
+    #             [7.0, 7.0, 7.0])
+    # for i in range(6):
 
-        inicial = matriz.t[2] 
-        matriz.change_T([matriz.t[0], matriz.t[1], i*20])
-        desenhos.desenha_arvore1(model, program, matriz)
+    #     inicial = matriz.t[2] 
+    #     matriz.change_T([matriz.t[0], matriz.t[1], i*20])
+    #     desenhos.desenha_arvore1(model, program, matriz)
 
-        matriz.change_T([matriz.t[0], matriz.t[1], i*(-20)])
-        desenhos.desenha_arvore1(model, program, matriz)
-
-    # desenha_terreno2()
-    # desenha_monstro(rotacao_inc)
+    #     matriz.change_T([matriz.t[0], matriz.t[1], i*(-20)])
+    #     desenhos.desenha_arvore1(model, program, matriz)
+    
     
     mat_view = view()
     loc_view = glGetUniformLocation(program, "view")

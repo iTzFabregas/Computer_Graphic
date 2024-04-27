@@ -75,10 +75,11 @@ def load_model_from_file(filename):
 
     return model
 
-def processando_modelo(modelo, vertices_list, textures_coord_list):
+def processando_modelo(modelo):
 
+    global vertices_list, textures_coord_list
     ### inserindo vertices do modelo no vetor de vertices
-    print('Vertice inicial:',len(vertices_list))
+    vert_inicial = len(vertices_list)
     # faces_visited = []
     for face in modelo['faces']:
         # if face[2] not in faces_visited:
@@ -88,5 +89,7 @@ def processando_modelo(modelo, vertices_list, textures_coord_list):
             vertices_list.append( modelo['vertices'][vertice_id-1] )
         for texture_id in face[1]:
             textures_coord_list.append( modelo['texture'][texture_id-1] )
-    print('Vertice final:',len(vertices_list), end="\n\n")
+    num_vert = len(vertices_list) - vert_inicial
+
+    return vert_inicial, num_vert
 

@@ -6,13 +6,15 @@ import glm
 import math
 from PIL import Image
 
+### A lista abaixo armazena todos os vertices carregados dos arquivos
+vertices_list = []    
+textures_coord_list = []
+
+
 class MatrizTRS:
-    t = [0.0,0.0,0.0] # x,y,z
-    r = [0.0,0.0,0.0] # x,y,z
-    s = [0.0,0.0,0.0] # x,y,z
 
     def __init__(self):
-        self.t = [0.0,0.0,0.0]
+        self.t = [50.0,0.0,50.0]
         self.r = [0.0,0.0,0.0]
         self.s = [0.0,0.0,0.0]
     

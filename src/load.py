@@ -17,7 +17,6 @@ def load_texture_from_file(texture_id, img_textura):
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     img = Image.open(img_textura)
-    print(img_textura,img.mode)
     img_width = img.size[0]
     img_height = img.size[1]
     #image_data = img.tobytes("raw", "RGB", 0, -1)

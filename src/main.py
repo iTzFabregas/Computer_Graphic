@@ -219,8 +219,8 @@ terreno_grama = Object('../objects/terreno/terreno.obj', '../objects/terreno/gra
 sky = Object('../objects/sky/sky.obj', '../objects/sky/sky.png', 4)
 spiderman = Object('../objects/spiderman/spiderman.obj', '../objects/spiderman/spiderman.png', 5)
 tanks = Object('../objects/tanks/tanks.obj', '../objects/tanks/tanks.jpg', 6)
+arvore = Object('../objects/arvore/arvore.obj', '../objects/arvore/bark_0021.jpg', 7) # TEM UM TRONCO E FOLHA
 
-# arvore = Object('../objects/arvore/arvore.obj', '../objects/arvore/bark_0021.jpg', 7) # TEM UM TRONCO E FOLHA
 # load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg') # TRONCO
 # load.load_texture_from_file(7,'../objects/arvore/DB2X2_L01.png') # FOLHA
 
@@ -305,8 +305,50 @@ glfw.set_cursor_pos(window, lastX, lastY)
 ### Loop principal da janela.
 # Enquanto a janela não for fechada, esse laço será executado. É neste espaço que trabalhamos com algumas interações com a OpenGL.
 glEnable(GL_DEPTH_TEST) ### importante para 3D
-   
+
+
+
+### Setando matrizes iniciais
 inc = 0
+terreno_pedra.matriz.change_All(
+                [0.0, -0.9, 0,0], 
+                [0.0, 0.0, 1.0], 
+                [2.0, 1.0, 100.0])
+
+terreno_grama.matriz.change_All(
+                [4.0, -1.0, 0,0], 
+                [0.0, 0.0, 1.0], 
+                [100.0, 100.0, 100.0])
+
+sky.matriz.change_All(
+                [0.0, 0.0, 0,0], 
+                [0.0, 1.0, 0.0], 
+                [3.0, 3.0, 3.0])
+sky.change_Angle(inc)
+
+casa.matriz.change_All(
+                [-30.0, -1.0, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+casa.change_Angle(175)
+
+spiderman.matriz.change_All(
+                [-5.0, -0.9, 30.0],
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+spiderman.change_Angle(90)
+
+tanks.matriz.change_All(
+                [50.0, 0.0, (0.0+inc)], 
+                [1.0, 0.0, 0.0], 
+                [1.0, 1.0, 1.0])
+tanks.change_Angle(-90)
+
+arvore.matriz.change_All(
+                [-10.0, -1.0, 0.0],
+                [0.0, 0.0, 1.0], 
+                [7.0, 7.0, 7.0])
+
 while not glfw.window_should_close(window):
 
     glfw.poll_events() 
@@ -321,65 +363,20 @@ while not glfw.window_should_close(window):
     
 
     inc += 0.01
-    terreno_pedra.matriz.change_All(
-                [0.0, -0.9, 0,0], 
-                [0.0, 0.0, 1.0], 
-                [2.0, 1.0, 100.0])
+    
     terreno_pedra.desenha(model, program)
-
-
-    terreno_grama.matriz.change_All(
-                [4.0, -1.0, 0,0], 
-                [0.0, 0.0, 1.0], 
-                [100.0, 100.0, 100.0])
     terreno_grama.desenha(model, program)
-
-
-    sky.matriz.change_All(
-                [0.0, 0.0, 0,0], 
-                [0.0, 1.0, 0.0], 
-                [3.0, 3.0, 3.0])
-    sky.change_Angle(inc) # UMA HORA VAI QUEBRAR, VAI ESTOURAR
     sky.desenha(model, program)
-
-
-    casa.matriz.change_All(
-                [-30.0, -1.0, 30.0], 
-                [0.0, 1.0, 0.0], 
-                [1.0, 1.0, 1.0])
-    casa.change_Angle(180)
     casa.desenha(model, program)
-
-
-    spiderman.matriz.change_All(
-                [-5.0, -0.9, 30.0],
-                [0.0, 1.0, 0.0], 
-                [1.0, 1.0, 1.0])
-    spiderman.change_Angle(90)
     spiderman.desenha(model, program)
-
-
-    tanks.matriz.change_All(
-                [50.0, 0.0, (0.0+inc)], 
-                [1.0, 0.0, 0.0], 
-                [1.0, 1.0, 1.0])
-    tanks.change_Angle(-90)
     tanks.desenha(model, program)
-    
 
-    # matriz.change_All(
-    #             [-10.0, -1.0, 0.0],
-    #             [0.0, 0.0, 1.0], 
-    #             [7.0, 7.0, 7.0])
-    # for i in range(6):
+    for i in range(6):        
+        arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])
+        arvore.desenha(model, program)
+        arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*(-20)])
+        arvore.desenha(model, program)
 
-    #     inicial = matriz.t[2] 
-    #     matriz.change_T([matriz.t[0], matriz.t[1], i*20])
-    #     desenhos.desenha_arvore1(model, program, matriz)
-
-    #     matriz.change_T([matriz.t[0], matriz.t[1], i*(-20)])
-    #     desenhos.desenha_arvore1(model, program, matriz)
-    
     
     mat_view = view()
     loc_view = glGetUniformLocation(program, "view")

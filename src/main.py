@@ -4,7 +4,7 @@
 from globals import *
 from sprites import Object
 
-qtd_texturas = 12
+qtd_texturas = 16
 altura = 1600
 largura = 1900
 
@@ -224,6 +224,7 @@ arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jp
 terreno2 = Object('../objects/terreno2/terreno2.obj', ['../objects/terreno2/terreno3.png'], 9)
 monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 10)
 cottage = Object('../objects/cottage/cottage.obj', ['../objects/cottage/texture/Cottage_Clean_AO.png'], 11)
+chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 12)
 
 
 
@@ -272,7 +273,7 @@ glVertexAttribPointer(loc_texture_coord, 2, GL_FLOAT, False, stride, offset)
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 
-cameraPos   = glm.vec3(0.0,  10.0,  30.0);
+cameraPos   = glm.vec3(-30.0,  5.0,  30.0);
 cameraFront = glm.vec3(0.0,  0.0, -1.0);
 cameraUp    = glm.vec3(0.0,  1.0,  0.0);
 
@@ -322,7 +323,6 @@ sky.matriz.change_All(
                 [0.0, 0.0, 0,0], 
                 [0.0, 1.0, 0.0], 
                 [3.0, 3.0, 3.0])
-sky.change_Angle(inc)
 
 casa.matriz.change_All(
                 [-30.0, -1.0, 30.0], 
@@ -333,7 +333,7 @@ casa.change_Angle(176)
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
                 [0.0, 1.0, 0.0], 
-                [15.0, 1.0, 8.0])
+                [15.5, 1.0, 8.5])
 
 spiderman.matriz.change_All(
                 [-5.0, -0.9, 30.0],
@@ -352,14 +352,21 @@ arvore.matriz.change_All(
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
-# cottage.matriz.change_All(
-#                 [-30.0, -1.0, 30.0], 
-#                 [0.0, 1.0, 0.0], 
-#                 [7.0, 7.0, 7.0])
+cottage.matriz.change_All(
+                [90.0, -1.0, 0.0], 
+                [0.0, 1.0, 1.0], 
+                [5.0, 5.0, 5.0])
+
+chair.matriz.change_All(
+                [-30.0, -1.0, 24.0], 
+                [0.0, 1.0, 0.0], 
+                [5.0, 5.0, 5.0])
 
 while not glfw.window_should_close(window):
 
     inc += 0.01
+    sky.change_Angle(inc)
+
     glfw.poll_events() 
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -370,17 +377,16 @@ while not glfw.window_should_close(window):
     
     terreno_grama.desenha(model, program)
     sky.desenha(model, program)
+    casa.desenha(model, program)
+    terreno_interno.desenha(model, program)
+    cottage.desenha(model, program)
+    spiderman.desenha(model, program)   
+    # tanks.desenha(model, program)
+    chair.desenha(model, program)
 
     for i in range(100):
         terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])
         terreno_pedra.desenha(model, program)
-    
-    casa.desenha(model, program)
-    terreno_interno.desenha(model, program)
-    
-    # cottage.desenha(model, program)
-    spiderman.desenha(model, program)   
-    # tanks.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])

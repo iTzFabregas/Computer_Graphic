@@ -13,6 +13,7 @@ class Object:
         modelo = load_model_from_file(url_model)
         print('Processando modelo: ' + url_model)
         vert_inicial, num_vert = processando_modelo(modelo)
+        print(str(vert_inicial) + "  " + str(num_vert), end="\n\n")
         load_texture_from_file(id_texture, url_texture)
 
         self.matriz = MatrizTRS()

@@ -215,6 +215,7 @@ textures = glGenTextures(qtd_texturas)
 caixa = Object('../objects/caixa/caixa.obj', '../objects/caixa/caixa2.jpg', 0)
 terreno_pedra = Object('../objects/terreno/terreno.obj', '../objects/terreno/pedra.jpg', 1)
 casa = Object('../objects/casa/casa.obj', '../objects/casa/casa.jpg', 2)
+terreno_interno = Object('../objects/terreno/terreno.obj', '../objects/terreno/pedra.jpg', 1)
 terreno_grama = Object('../objects/terreno/terreno.obj', '../objects/terreno/grama.jpg', 3)
 sky = Object('../objects/sky/sky.obj', '../objects/sky/sky.png', 4)
 spiderman = Object('../objects/spiderman/spiderman.obj', '../objects/spiderman/spiderman.png', 5)
@@ -224,8 +225,9 @@ arvore = Object('../objects/arvore/arvore.obj', '../objects/arvore/bark_0021.jpg
 # load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg') # TRONCO
 # load.load_texture_from_file(7,'../objects/arvore/DB2X2_L01.png') # FOLHA
 
-terreno2 = Object('../objects/terreno2/terreno2.obj', '../objects/terreno2/terreno3.png', 9)
-monstro = Object('../objects/monstro/monstro.obj', '../objects/monstro/monstro.jpg', 10)
+terreno2 = Object('../objects/terreno2/terreno2.obj', '../objects/terreno2/terreno3.png', 8)
+monstro = Object('../objects/monstro/monstro.obj', '../objects/monstro/monstro.jpg', 9)
+cottage = Object('../objects/cottage/cottage.obj', '../objects/cottage/texture/Cottage_Clean_AO.png', 10)
 
 
 
@@ -274,7 +276,7 @@ glVertexAttribPointer(loc_texture_coord, 2, GL_FLOAT, False, stride, offset)
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 
-cameraPos   = glm.vec3(0.0,  0.0,  1.0);
+cameraPos   = glm.vec3(0.0,  10.0,  30.0);
 cameraFront = glm.vec3(0.0,  0.0, -1.0);
 cameraUp    = glm.vec3(0.0,  1.0,  0.0);
 
@@ -313,7 +315,7 @@ inc = 0
 terreno_pedra.matriz.change_All(
                 [0.0, -0.9, 0,0], 
                 [0.0, 0.0, 1.0], 
-                [2.0, 1.0, 100.0])
+                [4.0, 4.0, 4.0])
 
 terreno_grama.matriz.change_All(
                 [4.0, -1.0, 0,0], 
@@ -330,7 +332,12 @@ casa.matriz.change_All(
                 [-30.0, -1.0, 30.0], 
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
-casa.change_Angle(175)
+casa.change_Angle(176)
+
+terreno_interno.matriz.change_All(
+                [-28.0, -0.9, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [15.0, 1.0, 8.0])
 
 spiderman.matriz.change_All(
                 [-5.0, -0.9, 30.0],
@@ -349,33 +356,41 @@ arvore.matriz.change_All(
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
+cottage.matriz.change_All(
+                [-30.0, -1.0, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [7.0, 7.0, 7.0])
+
 while not glfw.window_should_close(window):
 
+    inc += 0.01
     glfw.poll_events() 
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glClearColor(1.0, 1.0, 1.0, 1.0)
     
-    if polygonal_mode==True:
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE)
-    if polygonal_mode==False:
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
+    if polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_LINE)
+    if not polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
     
-
-    inc += 0.01
-    
-    terreno_pedra.desenha(model, program)
     terreno_grama.desenha(model, program)
     sky.desenha(model, program)
+
+    for i in range(100):
+        terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])
+        terreno_pedra.desenha(model, program)
+    
     casa.desenha(model, program)
-    spiderman.desenha(model, program)
+    terreno_interno.desenha(model, program)
+    
+    # cottage.desenha(model, program)
+    spiderman.desenha(model, program)   
     tanks.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])
-        arvore.desenha(model, program)
+        # arvore.desenha(model, program)
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*(-20)])
-        arvore.desenha(model, program)
+        # arvore.desenha(model, program)
 
     
     mat_view = view()

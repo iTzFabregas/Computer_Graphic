@@ -14,9 +14,9 @@ textures_coord_list = []
 class MatrizTRS:
 
     def __init__(self):
-        self.t = [50.0,0.0,50.0]
+        self.t = [0.0,0.0,0.0]
         self.r = [0.0,0.0,0.0]
-        self.s = [0.0,0.0,0.0]
+        self.s = [1.0,1.0,1.0]
     
     def change_T(self, t):
         self.t = t

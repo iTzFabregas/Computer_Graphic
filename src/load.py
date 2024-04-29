@@ -78,17 +78,20 @@ def processando_modelo(modelo):
 
     global vertices_list, textures_coord_list
     ### inserindo vertices do modelo no vetor de vertices
-    vert_inicial = len(vertices_list)
+    textures_verts = []
+
     faces_visited = []
     for face in modelo['faces']:
         if face[2] not in faces_visited:
-            print(face[2],' vertice inicial =',len(vertices_list))
             faces_visited.append(face[2])
+            textures_verts.append(len(vertices_list))
+            
         for vertice_id in face[0]:
             vertices_list.append( modelo['vertices'][vertice_id-1] )
         for texture_id in face[1]:
             textures_coord_list.append( modelo['texture'][texture_id-1] )
-    num_vert = len(vertices_list) - vert_inicial
 
-    return vert_inicial, num_vert
+    textures_verts.append(len(vertices_list))
+
+    return textures_verts
 

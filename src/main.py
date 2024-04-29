@@ -4,7 +4,7 @@
 from globals import *
 from sprites import Object
 
-qtd_texturas = 11
+qtd_texturas = 12
 altura = 1600
 largura = 1900
 
@@ -212,22 +212,18 @@ textures = glGenTextures(qtd_texturas)
 
 
 ### Vamos carregar cada modelo e definir funções para desenhá-los
-caixa = Object('../objects/caixa/caixa.obj', '../objects/caixa/caixa2.jpg', 0)
-terreno_pedra = Object('../objects/terreno/terreno.obj', '../objects/terreno/pedra.jpg', 1)
-casa = Object('../objects/casa/casa.obj', '../objects/casa/casa.jpg', 2)
-terreno_interno = Object('../objects/terreno/terreno.obj', '../objects/terreno/pedra.jpg', 1)
-terreno_grama = Object('../objects/terreno/terreno.obj', '../objects/terreno/grama.jpg', 3)
-sky = Object('../objects/sky/sky.obj', '../objects/sky/sky.png', 4)
-spiderman = Object('../objects/spiderman/spiderman.obj', '../objects/spiderman/spiderman.png', 5)
-tanks = Object('../objects/tanks/tanks.obj', '../objects/tanks/tanks.jpg', 6)
-arvore = Object('../objects/arvore/arvore.obj', '../objects/arvore/bark_0021.jpg', 7) # TEM UM TRONCO E FOLHA
-
-# load.load_texture_from_file(8,'../objects/arvore/bark_0021.jpg') # TRONCO
-# load.load_texture_from_file(7,'../objects/arvore/DB2X2_L01.png') # FOLHA
-
-terreno2 = Object('../objects/terreno2/terreno2.obj', '../objects/terreno2/terreno3.png', 8)
-monstro = Object('../objects/monstro/monstro.obj', '../objects/monstro/monstro.jpg', 9)
-cottage = Object('../objects/cottage/cottage.obj', '../objects/cottage/texture/Cottage_Clean_AO.png', 10)
+caixa = Object('../objects/caixa/caixa.obj', ['../objects/caixa/caixa2.jpg'], 0)
+terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 1)
+casa = Object('../objects/casa/casa.obj', ['../objects/casa/casa.jpg'], 2)
+terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 1)
+terreno_grama = Object('../objects/terreno/terreno.obj', ['../objects/terreno/grama.jpg'], 3)
+sky = Object('../objects/sky/sky.obj', ['../objects/sky/sky.png'], 4)
+spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 5)
+tanks = Object('../objects/tanks/tanks.obj', ['../objects/tanks/tanks.jpg'], 6)
+arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 7) # TEM UM TRONCO E FOLHA
+terreno2 = Object('../objects/terreno2/terreno2.obj', ['../objects/terreno2/terreno3.png'], 9)
+monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 10)
+cottage = Object('../objects/cottage/cottage.obj', ['../objects/cottage/texture/Cottage_Clean_AO.png'], 11)
 
 
 
@@ -356,10 +352,10 @@ arvore.matriz.change_All(
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
-cottage.matriz.change_All(
-                [-30.0, -1.0, 30.0], 
-                [0.0, 1.0, 0.0], 
-                [7.0, 7.0, 7.0])
+# cottage.matriz.change_All(
+#                 [-30.0, -1.0, 30.0], 
+#                 [0.0, 1.0, 0.0], 
+#                 [7.0, 7.0, 7.0])
 
 while not glfw.window_should_close(window):
 
@@ -384,13 +380,13 @@ while not glfw.window_should_close(window):
     
     # cottage.desenha(model, program)
     spiderman.desenha(model, program)   
-    tanks.desenha(model, program)
+    # tanks.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])
-        # arvore.desenha(model, program)
+        arvore.desenha(model, program)
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*(-20)])
-        # arvore.desenha(model, program)
+        arvore.desenha(model, program)
 
     
     mat_view = view()

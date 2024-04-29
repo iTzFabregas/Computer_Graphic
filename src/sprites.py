@@ -3,24 +3,25 @@ from load import load_model_from_file, processando_modelo, load_texture_from_fil
 
 class Object:
 
-    # matriz
-    # angle
-    # vert_inicial
-    # num_vert
-
-    def __init__(self, url_model, url_texture, id_texture):
+    def __init__(self, url_model, urls_textures, start_id_texture):
         
         modelo = load_model_from_file(url_model)
+
         print('Processando modelo: ' + url_model)
-        vert_inicial, num_vert = processando_modelo(modelo)
-        print(str(vert_inicial) + "  " + str(num_vert), end="\n\n")
-        load_texture_from_file(id_texture, url_texture)
+        textures_verts = processando_modelo(modelo)
+        print("Vertice inicial: " + str(textures_verts[0]) 
+        + "\nVertice Final: " + str(textures_verts[len(textures_verts)-1]) 
+        + "\nNumero de texturas: " + str(len(textures_verts)-1))
+
+        for i in range(0, len(urls_textures)):
+            print(str(start_id_texture + i) + " " + urls_textures[i], end="\n")
+            load_texture_from_file(start_id_texture + i, urls_textures[i])
+        print("\n\n")
 
         self.matriz = MatrizTRS()
         self.angle = 0
-        self.vert_inicial = vert_inicial
-        self.num_vert = num_vert
-        self.id_texture = id_texture
+        self.textures_verts = textures_verts
+        self.start_id_texture = start_id_texture
     
     def change_Angle(self, angle):
         self.angle = angle
@@ -31,40 +32,7 @@ class Object:
         loc_model = glGetUniformLocation(program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
         
-        #define id da textura do modelo
-        glBindTexture(GL_TEXTURE_2D, self.id_texture)
-        
-        
-        # desenha o modelo
-        glDrawArrays(GL_TRIANGLES, self.vert_inicial, self.num_vert) ## renderizando
-    
-
-
-
-    def second_texture(self, url):
-        self.second_texture = url
-
-    
-    def desenha_arvore2(model, program, matrix):
-        
-        # rotacao
-        angle = 0.0;
-        
-        mat_model = model(angle, matrix)
-        loc_model = glGetUniformLocation(program, "model")
-        glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
-        
-        
-        ### desenho o tronco da arvore
-        #define id da textura do modelo
-        glBindTexture(GL_TEXTURE_2D, 8)
-        # desenha o modelo
-        glDrawArrays(GL_TRIANGLES, 683871, 704133-683871) ## renderizando
-        
-        ### desenho as folhas
-        #define id da textura do modelo
-        glBindTexture(GL_TEXTURE_2D, 9)
-        # desenha o modelo
-        glDrawArrays(GL_TRIANGLES, 704133, 725043-704133) ## renderizando
-        
+        for i in range(0, len(self.textures_verts)-1):
+            glBindTexture(GL_TEXTURE_2D, self.start_id_texture + i)        
+            glDrawArrays(GL_TRIANGLES, self.textures_verts[i], self.textures_verts[i+1] - self.textures_verts[i])
             

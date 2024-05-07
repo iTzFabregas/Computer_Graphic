@@ -225,6 +225,8 @@ bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
 field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
+shrek = Object('../objects/Shrek/shrek.obj', ['../objects/Shrek/s2.png', '../objects/Shrek/s1.png'], 18)
+television = Object('../objects/television/a_prop_TV.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
 
 
 
@@ -366,6 +368,14 @@ yoshi.matriz.change_All(
                 [3.0, 3.0, 3.0])
 yoshi.change_angle(135)
 
+television.matriz.change_All(
+                [-15.0, -1.0, 24.0], 
+                [0.0, 1.0, 0.0], 
+                [0.03, 0.03, 0.03])
+television.change_angle(-45)
+
+##################################################
+
 car.matriz.change_All(
                 [0.0, -1.0, -100.0],
                 [0.0, 1.0, 0.0],
@@ -376,13 +386,18 @@ house2.matriz.change_All(
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
 house2.change_angle(-90)
-##################################################
+
+shrek.matriz.change_All(
+                [20.0, -1.0, 20.0], 
+                [0.0, 1.0, 0.0], 
+                [0.2, 0.2, 0.2])
 
 while not glfw.window_should_close(window):
 
     inc += 0.02
     # sky.matriz.change_R([1.0, (inc/2), 0.0])
     car.matriz.change_T([0.0, -1.0, (-100.0+inc)])
+    shrek.change_angle(inc*10)
 
     glfw.poll_events() 
     
@@ -405,6 +420,8 @@ while not glfw.window_should_close(window):
     yoshi.desenha(model, program)
     house2.desenha(model, program)
     car.desenha(model, program)
+    shrek.desenha(model, program)
+    television.desenha(model,program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])

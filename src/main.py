@@ -4,7 +4,7 @@
 from globals import *
 from sprites import Object
 
-qtd_texturas = 16
+qtd_texturas = 17
 altura = 1600
 largura = 1900
 
@@ -225,6 +225,8 @@ terreno2 = Object('../objects/terreno2/terreno2.obj', ['../objects/terreno2/terr
 monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 10)
 cottage = Object('../objects/cottage/cottage.obj', ['../objects/cottage/texture/Cottage_Clean_AO.png'], 11)
 chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 12)
+yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 13)
+house = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 14)
 
 
 
@@ -379,10 +381,11 @@ while not glfw.window_should_close(window):
     sky.desenha(model, program)
     casa.desenha(model, program)
     terreno_interno.desenha(model, program)
-    cottage.desenha(model, program)
+    # cottage.desenha(model, program)
     spiderman.desenha(model, program)   
-    # tanks.desenha(model, program)
     chair.desenha(model, program)
+    yoshi.desenha(model, program)
+    house.desenha(model, program)
 
     for i in range(100):
         terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])

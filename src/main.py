@@ -309,9 +309,9 @@ glEnable(GL_DEPTH_TEST) ### importante para 3D
 ### Setando matrizes iniciais
 inc = 0
 terreno_pedra.matriz.change_All(
-                [0.0, -0.9, 0,0], 
+                [0.0, -0.9, -100,0], 
                 [0.0, 0.0, 1.0], 
-                [4.0, 4.0, 4.0])
+                [4.0, 4.0, 200.0])
 
 field.matriz.change_All(
                 [4.0, -1.0, 0,0], 
@@ -319,7 +319,7 @@ field.matriz.change_All(
                 [20.0, 20.0, 20.0])
 
 sky.matriz.change_All(
-                [0.0, -50.0, 0,0], 
+                [0.0, 0.0, 0,0], 
                 [1.0, 0.0, 0.0], 
                 [5.0, 5.0, 5.0])
 sky.change_angle(-90)
@@ -376,6 +376,7 @@ while not glfw.window_should_close(window):
     
     field.desenha(model, program)
     sky.desenha(model, program)
+    terreno_pedra.desenha(model, program)
 
     house1.desenha(model, program)
     terreno_interno.desenha(model, program)
@@ -385,10 +386,6 @@ while not glfw.window_should_close(window):
     spiderman.desenha(model, program)   
     yoshi.desenha(model, program)
     house2.desenha(model, program)
-
-    for i in range(100):
-        terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])
-        terreno_pedra.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])

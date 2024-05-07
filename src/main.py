@@ -36,12 +36,22 @@ def key_event(window,key,scancode,action,mods):
         
     if key == 68 and (action==1 or action==2): # tecla D
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
-        
-    if key == 80 and action==1 and polygonal_mode==True:
-        polygonal_mode=False
-    else:
-        if key == 80 and action==1 and polygonal_mode==False:
-            polygonal_mode=True
+
+    if key == 265 and (action==1 or action==2): # tecla seta cima
+        shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] - 0.1])
+    if key == 264 and (action==1 or action==2): # tecla seta baixo
+        shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] + 0.1])
+    if key == 262 and (action==1 or action==2): # tecla seta direita
+        shrek.matriz.change_T([shrek.matriz.t[0] + 0.1, shrek.matriz.t[1], shrek.matriz.t[2]])
+    if key == 263 and (action==1 or action==2): # tecla seta esquerda
+        shrek.matriz.change_T([shrek.matriz.t[0] - 0.1, shrek.matriz.t[1], shrek.matriz.t[2]])
+    if key == 46 and (action==1 or action==2): # tecla "." ">"
+        shrek.matriz.change_S([shrek.matriz.s[0] + 0.001, shrek.matriz.s[1] + 0.001, shrek.matriz.s[2] + 0.001])
+    if key == 44 and (action==1 or action==2): # tecla "," "<"
+        shrek.matriz.change_S([shrek.matriz.s[0] - 0.001, shrek.matriz.s[1] - 0.001, shrek.matriz.s[2] - 0.001])
+
+
+    if key == 80 and action == 1: polygonal_mode = not polygonal_mode
 
 def mouse_event(window, xpos, ypos):
     global firstMouse, cameraFront, yaw, pitch, lastX, lastY
@@ -227,6 +237,7 @@ field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png',
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
 shrek = Object('../objects/Shrek/shrek.obj', ['../objects/Shrek/s2.png', '../objects/Shrek/s1.png'], 18)
 television = Object('../objects/television/a_prop_TV.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
+rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
 
 
 
@@ -322,7 +333,7 @@ field.matriz.change_All(
                 [20.0, 20.0, 20.0])
 
 sky.matriz.change_All(
-                [0.0, 0.0, 0,0], 
+                [0.0, -10.0, 0,0], 
                 [1.0, 0.0, 0.0], 
                 [5.0, 5.0, 5.0])
 sky.change_angle(-90)
@@ -392,12 +403,17 @@ shrek.matriz.change_All(
                 [0.0, 1.0, 0.0], 
                 [0.2, 0.2, 0.2])
 
+rocket.matriz.change_All(
+                [75.0, 20.0, -50.0], 
+                [0.0, 1.0, 0.0], 
+                [0.005, 0.005, 0.005])
+
 while not glfw.window_should_close(window):
 
     inc += 0.02
     # sky.matriz.change_R([1.0, (inc/2), 0.0])
     car.matriz.change_T([0.0, -1.0, (-100.0+inc)])
-    shrek.change_angle(inc*10)
+    shrek.change_angle(inc*25)
 
     glfw.poll_events() 
     
@@ -415,13 +431,14 @@ while not glfw.window_should_close(window):
     terreno_interno.desenha(model, program)
     chair.desenha(model, program)
     bed.desenha(model, program)
+    yoshi.desenha(model, program)
+    television.desenha(model,program)
 
     spiderman.desenha(model, program)   
-    yoshi.desenha(model, program)
     house2.desenha(model, program)
     car.desenha(model, program)
     shrek.desenha(model, program)
-    television.desenha(model,program)
+    rocket.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])

@@ -4,7 +4,7 @@
 from globals import *
 from sprites import Object
 
-qtd_texturas = 19
+qtd_texturas = 25
 altura = 1600
 largura = 1900
 
@@ -212,23 +212,18 @@ textures = glGenTextures(qtd_texturas)
 
 
 ### Vamos carregar cada modelo e definir funções para desenhá-los
-caixa = Object('../objects/caixa/caixa.obj', ['../objects/caixa/caixa2.jpg'], 0)
-terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 1)
-casa = Object('../objects/casa/casa.obj', ['../objects/casa/casa.jpg'], 2)
-terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 1)
-terreno_grama = Object('../objects/terreno/terreno.obj', ['../objects/terreno/grama.jpg'], 3)
-sky = Object('../objects/sky/sky.obj', ['../objects/sky/sky.png'], 4)
-spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 5)
-tanks = Object('../objects/tanks/tanks.obj', ['../objects/tanks/tanks.jpg'], 6)
-arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 7) # TEM UM TRONCO E FOLHA
-terreno2 = Object('../objects/terreno2/terreno2.obj', ['../objects/terreno2/terreno3.png'], 9)
-monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 10)
-cottage = Object('../objects/cottage/cottage.obj', ['../objects/cottage/texture/Cottage_Clean_AO.png'], 11)
-chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 12)
-yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 13)
-house = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 14)
-bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_bob.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_barrel.png'], 15)
-sky2 = Object('../objects/sky2/275out.obj', ['../objects/sky2/275_lp_di1mt55p.png', '../objects/sky2/275_di1mt81p.png'], 18)
+terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
+terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
+house1 = Object('../objects/casa/casa.obj', ['../objects/casa/casa.jpg'], 1)
+spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
+arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3) # TEM UM TRONCO E FOLHA
+monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 5)
+chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6)
+yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7)
+house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 8)
+bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_bob.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_barrel.png'], 9)
+sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
+field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 
 
 
@@ -318,32 +313,16 @@ terreno_pedra.matriz.change_All(
                 [0.0, 0.0, 1.0], 
                 [4.0, 4.0, 4.0])
 
-terreno_grama.matriz.change_All(
+field.matriz.change_All(
                 [4.0, -1.0, 0,0], 
                 [0.0, 0.0, 1.0], 
-                [100.0, 100.0, 100.0])
+                [20.0, 20.0, 20.0])
 
 sky.matriz.change_All(
-                [0.0, 0.0, 0,0], 
-                [0.0, 1.0, 0.0], 
-                [3.0, 3.0, 3.0])
-
-
-sky2.matriz.change_All(
                 [0.0, -50.0, 0,0], 
                 [1.0, 0.0, 0.0], 
                 [5.0, 5.0, 5.0])
-sky2.change_angle(-90)
-
-cottage.matriz.change_All(
-                [90.0, -1.0, 0.0], 
-                [0.0, 1.0, 1.0], 
-                [5.0, 5.0, 5.0])
-
-terreno_interno.matriz.change_All(
-                [-28.0, -0.9, 30.0], 
-                [0.0, 1.0, 0.0], 
-                [15.5, 1.0, 8.5])
+sky.change_angle(-90)
 
 spiderman.matriz.change_All(
                 [-5.0, -0.9, 30.0],
@@ -351,25 +330,23 @@ spiderman.matriz.change_All(
                 [1.0, 1.0, 1.0])
 spiderman.change_angle(90)
 
-tanks.matriz.change_All(
-                [50.0, 0.0, (0.0+inc)], 
-                [1.0, 0.0, 0.0], 
-                [1.0, 1.0, 1.0])
-tanks.change_angle(-90)
-
 arvore.matriz.change_All(
                 [-10.0, -1.0, 0.0],
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
-
 ### CASA E A PARTE INTERNA, SE MUDAR UM MUDA TODOS
 
-casa.matriz.change_All(
+house1.matriz.change_All(
                 [-30.0, -1.0, 30.0], 
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
-casa.change_angle(176)
+house1.change_angle(176)
+
+terreno_interno.matriz.change_All(
+                [-28.0, -0.9, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [15.5, 1.0, 8.1])
 
 chair.matriz.change_All(
                 [-30.0, -1.0, 24.0], 
@@ -377,7 +354,7 @@ chair.matriz.change_All(
                 [5.0, 5.0, 5.0])
                 
 bed.matriz.change_All(
-                [-38.0, -1.0, 33.0], 
+                [-38.0, -1.0, 31.5], 
                 [0.0, 1.0, 0.0], 
                 [1.5, 1.5, 1.5])
 bed.change_angle(90)
@@ -387,7 +364,7 @@ bed.change_angle(90)
 while not glfw.window_should_close(window):
 
     inc += 0.01
-    sky.change_angle(inc)
+    #sky.change_angle(inc)
 
     glfw.poll_events() 
     
@@ -397,18 +374,17 @@ while not glfw.window_should_close(window):
     if polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_LINE)
     if not polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
     
-    terreno_grama.desenha(model, program)
-    # sky.desenha(model, program)
-    casa.desenha(model, program)
-    terreno_interno.desenha(model, program)
-    # cottage.desenha(model, program)
-    spiderman.desenha(model, program)   
-    chair.desenha(model, program)
+    field.desenha(model, program)
+    sky.desenha(model, program)
 
-    yoshi.desenha(model, program)
-    house.desenha(model, program)
+    house1.desenha(model, program)
+    terreno_interno.desenha(model, program)
+    chair.desenha(model, program)
     bed.desenha(model, program)
-    sky2.desenha(model, program)
+
+    spiderman.desenha(model, program)   
+    yoshi.desenha(model, program)
+    house2.desenha(model, program)
 
     for i in range(100):
         terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])

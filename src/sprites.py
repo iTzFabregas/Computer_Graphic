@@ -23,7 +23,7 @@ class Object:
         self.textures_verts = textures_verts
         self.start_id_texture = start_id_texture
     
-    def change_Angle(self, angle):
+    def change_angle(self, angle):
         self.angle = angle
 
     def desenha(self, model, program):

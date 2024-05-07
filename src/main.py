@@ -4,7 +4,7 @@
 from globals import *
 from sprites import Object
 
-qtd_texturas = 17
+qtd_texturas = 19
 altura = 1600
 largura = 1900
 
@@ -227,6 +227,8 @@ cottage = Object('../objects/cottage/cottage.obj', ['../objects/cottage/texture/
 chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 12)
 yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 13)
 house = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 14)
+bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_bob.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_barrel.png'], 15)
+sky2 = Object('../objects/sky2/275out.obj', ['../objects/sky2/275_lp_di1mt55p.png', '../objects/sky2/275_di1mt81p.png'], 18)
 
 
 
@@ -326,11 +328,17 @@ sky.matriz.change_All(
                 [0.0, 1.0, 0.0], 
                 [3.0, 3.0, 3.0])
 
-casa.matriz.change_All(
-                [-30.0, -1.0, 30.0], 
-                [0.0, 1.0, 0.0], 
-                [1.0, 1.0, 1.0])
-casa.change_Angle(176)
+
+sky2.matriz.change_All(
+                [0.0, -50.0, 0,0], 
+                [1.0, 0.0, 0.0], 
+                [5.0, 5.0, 5.0])
+sky2.change_angle(-90)
+
+cottage.matriz.change_All(
+                [90.0, -1.0, 0.0], 
+                [0.0, 1.0, 1.0], 
+                [5.0, 5.0, 5.0])
 
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
@@ -341,33 +349,45 @@ spiderman.matriz.change_All(
                 [-5.0, -0.9, 30.0],
                 [0.0, 1.0, 0.0], 
                 [1.0, 1.0, 1.0])
-spiderman.change_Angle(90)
+spiderman.change_angle(90)
 
 tanks.matriz.change_All(
                 [50.0, 0.0, (0.0+inc)], 
                 [1.0, 0.0, 0.0], 
                 [1.0, 1.0, 1.0])
-tanks.change_Angle(-90)
+tanks.change_angle(-90)
 
 arvore.matriz.change_All(
                 [-10.0, -1.0, 0.0],
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
-cottage.matriz.change_All(
-                [90.0, -1.0, 0.0], 
-                [0.0, 1.0, 1.0], 
-                [5.0, 5.0, 5.0])
+
+### CASA E A PARTE INTERNA, SE MUDAR UM MUDA TODOS
+
+casa.matriz.change_All(
+                [-30.0, -1.0, 30.0], 
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+casa.change_angle(176)
 
 chair.matriz.change_All(
                 [-30.0, -1.0, 24.0], 
                 [0.0, 1.0, 0.0], 
                 [5.0, 5.0, 5.0])
+                
+bed.matriz.change_All(
+                [-38.0, -1.0, 33.0], 
+                [0.0, 1.0, 0.0], 
+                [1.5, 1.5, 1.5])
+bed.change_angle(90)
+
+##################################################
 
 while not glfw.window_should_close(window):
 
     inc += 0.01
-    sky.change_Angle(inc)
+    sky.change_angle(inc)
 
     glfw.poll_events() 
     
@@ -378,14 +398,17 @@ while not glfw.window_should_close(window):
     if not polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
     
     terreno_grama.desenha(model, program)
-    sky.desenha(model, program)
+    # sky.desenha(model, program)
     casa.desenha(model, program)
     terreno_interno.desenha(model, program)
     # cottage.desenha(model, program)
     spiderman.desenha(model, program)   
     chair.desenha(model, program)
+
     yoshi.desenha(model, program)
     house.desenha(model, program)
+    bed.desenha(model, program)
+    sky2.desenha(model, program)
 
     for i in range(100):
         terreno_pedra.matriz.change_T([0.0, -0.9, (i-50)*4])

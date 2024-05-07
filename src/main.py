@@ -224,6 +224,7 @@ house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squi
 bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_bob.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_barrel.png'], 9)
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
 field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
+car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
 
 
 
@@ -359,12 +360,29 @@ bed.matriz.change_All(
                 [1.5, 1.5, 1.5])
 bed.change_angle(90)
 
+yoshi.matriz.change_All(
+                [-25.0, -1.0, 35.0], 
+                [0.0, 1.0, 0.0], 
+                [3.0, 3.0, 3.0])
+yoshi.change_angle(135)
+
+car.matriz.change_All(
+                [0.0, -1.0, -100.0],
+                [0.0, 1.0, 0.0],
+                [0.3, 0.3, 0.3])
+
+house2.matriz.change_All(
+                [15.0, -1.0, -10.0], 
+                [0.0, 1.0, 0.0], 
+                [1.0, 1.0, 1.0])
+house2.change_angle(-90)
 ##################################################
 
 while not glfw.window_should_close(window):
 
-    inc += 0.01
-    #sky.change_angle(inc)
+    inc += 0.02
+    # sky.matriz.change_R([1.0, (inc/2), 0.0])
+    car.matriz.change_T([0.0, -1.0, (-100.0+inc)])
 
     glfw.poll_events() 
     
@@ -386,6 +404,7 @@ while not glfw.window_should_close(window):
     spiderman.desenha(model, program)   
     yoshi.desenha(model, program)
     house2.desenha(model, program)
+    car.desenha(model, program)
 
     for i in range(6):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])

@@ -39,14 +39,19 @@ def key_event(window,key,scancode,action,mods):
 
     if key == 265 and (action==1 or action==2): # tecla seta cima
         shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] - 0.1])
+
     if key == 264 and (action==1 or action==2): # tecla seta baixo
         shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] + 0.1])
+
     if key == 262 and (action==1 or action==2): # tecla seta direita
         shrek.matriz.change_T([shrek.matriz.t[0] + 0.1, shrek.matriz.t[1], shrek.matriz.t[2]])
+
     if key == 263 and (action==1 or action==2): # tecla seta esquerda
         shrek.matriz.change_T([shrek.matriz.t[0] - 0.1, shrek.matriz.t[1], shrek.matriz.t[2]])
+
     if key == 46 and (action==1 or action==2): # tecla "." ">"
         shrek.matriz.change_S([shrek.matriz.s[0] + 0.001, shrek.matriz.s[1] + 0.001, shrek.matriz.s[2] + 0.001])
+        
     if key == 44 and (action==1 or action==2): # tecla "," "<"
         shrek.matriz.change_S([shrek.matriz.s[0] - 0.001, shrek.matriz.s[1] - 0.001, shrek.matriz.s[2] - 0.001])
 
@@ -407,12 +412,14 @@ rocket.matriz.change_All(
                 [75.0, 20.0, -50.0], 
                 [0.0, 1.0, 0.0], 
                 [0.005, 0.005, 0.005])
+rocket.change_angle(180)
 
 while not glfw.window_should_close(window):
 
     inc += 0.02
     # sky.matriz.change_R([1.0, (inc/2), 0.0])
     car.matriz.change_T([0.0, -1.0, (-100.0+inc)])
+    rocket.matriz.change_T([75.0, 20.0, (50.0-inc/2)])
     shrek.change_angle(inc*25)
 
     glfw.poll_events() 

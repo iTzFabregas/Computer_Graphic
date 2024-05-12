@@ -85,9 +85,8 @@ def mouse_event(window, xpos, ypos):
     yaw += xoffset;
     pitch += yoffset;
 
-    
-    if pitch >= 90.0: pitch = 90.0
-    if pitch <= -90.0: pitch = -90.0
+    if pitch >= 90.0: pitch = 89.9
+    if pitch <= -90.0: pitch = -89.9
 
     front = glm.vec3()
     front.x = math.cos(glm.radians(yaw)) * math.cos(glm.radians(pitch))
@@ -426,7 +425,7 @@ while not glfw.window_should_close(window):
 
     inc += 0.02
     # sky.matriz.change_R([1.0, (inc/2), 0.0])
-    car.matriz.change_T([0.0, -1.0, (-100.0+inc)])
+    car.matriz.change_T([0.0, -1.0, (-100.0+inc/1.5)])
     rocket.matriz.change_T([75.0, 20.0, (50.0-inc/2)])
     shrek.change_angle(inc*25)
 

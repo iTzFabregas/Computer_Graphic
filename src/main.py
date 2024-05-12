@@ -8,14 +8,19 @@ qtd_texturas = 25
 altura = 1600
 largura = 1900
 
+def clamp(value, min_value, max_value):
+    return max(min_value, min(max_value, value))
+
+min_x, max_x = -80, 80
+min_y, max_y = 5,50
+min_z, max_z = -80,80
 
 ### Eventos para modificar a posição da câmera.
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 def key_event(window,key,scancode,action,mods):
     global cameraPos, cameraFront, cameraUp, polygonal_mode, inc_fov, inc_near, inc_far, cameraUp, inc_view_up
-    
-    # print(key)
+
     if key == 66:
         inc_view_up += 0.1
         #cameraUp    = glm.vec3(0.0+inc_view_up,  1.0+inc_view_up,  0.0+inc_view_up);
@@ -37,6 +42,10 @@ def key_event(window,key,scancode,action,mods):
     if key == 68 and (action==1 or action==2): # tecla D
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
 
+    cameraPos.x = clamp(cameraPos.x, min_x, max_x)
+    cameraPos.y = clamp(cameraPos.y, min_y, max_y)
+    cameraPos.z = clamp(cameraPos.z, min_z, max_z)
+
     if key == 265 and (action==1 or action==2): # tecla seta cima
         shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] - 0.1])
 
@@ -54,7 +63,6 @@ def key_event(window,key,scancode,action,mods):
         
     if key == 44 and (action==1 or action==2): # tecla "," "<"
         shrek.matriz.change_S([shrek.matriz.s[0] - 0.001, shrek.matriz.s[1] - 0.001, shrek.matriz.s[2] - 0.001])
-
 
     if key == 80 and action == 1: polygonal_mode = not polygonal_mode
 

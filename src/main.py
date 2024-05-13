@@ -8,12 +8,15 @@ qtd_texturas = 25
 altura = 1600
 largura = 1900
 
-def clamp(value, min_value, max_value):
-    return max(min_value, min(max_value, value))
-
 min_x, max_x = -80, 80
 min_y, max_y = 5,50
 min_z, max_z = -80,80
+
+
+# Função que não permite o usuário passar do extremos no mapa 
+def clamp(value, min_value, max_value):
+    return max(min_value, min(max_value, value))
+
 
 ### Eventos para modificar a posição da câmera.
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
@@ -233,7 +236,7 @@ textures = glGenTextures(qtd_texturas)
 
 
 
-### Vamos carregar cada modelo e definir funções para desenhá-los
+### Vamos carregar cada modelo e sua(s) respectiva(s) textura(s)
 terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 house1 = Object('../objects/casa/casa.obj', ['../objects/casa/casa.jpg'], 1)
@@ -361,7 +364,7 @@ arvore.matriz.change_All(
                 [0.0, 0.0, 1.0], 
                 [7.0, 7.0, 7.0])
 
-### CASA E A PARTE INTERNA, SE MUDAR UM MUDA TODOS
+### CASA E A PARTE INTERNA
 
 house1.matriz.change_All(
                 [-30.0, -1.0, 30.0], 
@@ -454,7 +457,7 @@ while not glfw.window_should_close(window):
     shrek.desenha(model, program)
     rocket.desenha(model, program)
 
-    for i in range(6):        
+    for i in range(5):        
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*20])
         arvore.desenha(model, program)
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*(-20)])

@@ -1,6 +1,8 @@
 from globals import *
 from load import load_model_from_file, processando_modelo, load_texture_from_file
 
+
+# Classe que guarda as informações de cada objeto, como vertices e texturas e a função de mudar o angulo e de desenhar na tela
 class Object:
 
     def __init__(self, url_model, urls_textures, start_id_texture):

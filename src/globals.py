@@ -10,7 +10,7 @@ from PIL import Image
 vertices_list = []    
 textures_coord_list = []
 
-
+# Classe que guarda a matriz translação de cada objeto
 class MatrizTRS:
 
     def __init__(self):

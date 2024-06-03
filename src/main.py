@@ -1,7 +1,8 @@
-# Dupla: Fabricio Sampaio NUSP: 12547423
-#       Vitor Nishimura Vian NUSP: 5255289
 #!/usr/bin/env python
 # coding: utf-8
+
+# Dupla: Fabricio Sampaio     NUSP: 12547423
+#        Vitor Nishimura Vian NUSP: 5255289
 
 from globals import *
 from sprites import Object

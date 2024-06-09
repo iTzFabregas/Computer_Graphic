@@ -9,6 +9,7 @@ from PIL import Image
 ### A lista abaixo armazena todos os vertices carregados dos arquivos
 vertices_list = []    
 textures_coord_list = []
+normals_list = []
 
 # Classe que guarda a matriz translação de cada objeto
 class MatrizTRS:

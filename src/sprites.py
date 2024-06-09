@@ -34,6 +34,24 @@ class Object:
         loc_model = glGetUniformLocation(program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
         
+        #### define parametros de ilumincao do modelo
+        ka = 0.1 # coeficiente de reflexao ambiente do modelo
+        kd = 0.6 # coeficieznte de reflexao difusa do modelo
+        ks = 0.3 # coeficiente de reflexao especular do modelo
+        ns = 32.0 # expoente de reflexao especular
+
+        loc_ka = glGetUniformLocation(program, "ka") # recuperando localizacao da variavel ka na GPU
+        glUniform1f(loc_ka, ka) ### envia ka pra gpu
+
+        loc_kd = glGetUniformLocation(program, "kd") # recuperando localizacao da variavel kd na GPU
+        glUniform1f(loc_kd, kd) ### envia kd pra gpu    
+
+        loc_ks = glGetUniformLocation(program, "ks") # recuperando localizacao da variavel ks na GPU
+        glUniform1f(loc_ks, ks) ### envia ns pra gpu        
+
+        loc_ns = glGetUniformLocation(program, "ns") # recuperando localizacao da variavel ns na GPU
+        glUniform1f(loc_ns, ns) ### envia ns pra gpu            
+
         for i in range(0, len(self.textures_verts)-1):
             glBindTexture(GL_TEXTURE_2D, self.start_id_texture + i)        
             glDrawArrays(GL_TRIANGLES, self.textures_verts[i], self.textures_verts[i+1] - self.textures_verts[i])

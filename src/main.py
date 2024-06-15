@@ -425,7 +425,7 @@ inc = 0
 terreno_pedra.matriz.change_All(
                 [0.0, -0.9, -100,0], 
                 [0.0, 0.0, 1.0], 
-                [4.0, 0.1, 200.0])
+                [3.0, 0.1, 200.0])
 
 field.matriz.change_All(
                 [4.0, -1.0, 0,0], 
@@ -460,12 +460,12 @@ house1.change_angle(176)
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
                 [0.0, 1.0, 0.0], 
-                [15.5, 0.1, 8.1])
+                [5.0, 0.1, 1.8])
 
 chair.matriz.change_All(
                 [-30.0, -1.0, 24.0], 
                 [0.0, 1.0, 0.0], 
-                [5.0, 5.0, 5.0])
+                [4.8, 5.0, 5.0])
                 
 bed.matriz.change_All(
                 [-38.0, -1.0, 31.5], 
@@ -517,7 +517,7 @@ while not glfw.window_should_close(window):
     inc += 0.05
     color_cnt += 1
 
-    car.matriz.change_T([0.0, -1.0, (-100.0+inc/1.5)])
+    car.matriz.change_T([0.0, -1.0, (-100.0+inc/2)])
     rocket.matriz.change_T([75.0, 20.0, (50.0-inc/3)])
     shrek.change_angle(inc*20)
 

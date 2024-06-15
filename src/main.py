@@ -316,7 +316,7 @@ textures = glGenTextures(qtd_texturas)
 ### Vamos carregar cada modelo e sua(s) respectiva(s) textura(s)
 terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
-# house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
+house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
 spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
 arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
 # monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 5)
@@ -327,8 +327,8 @@ bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
 field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
-# shrek = Object('../objects/Shrek/shrek.obj', ['../objects/Shrek/s2.png', '../objects/Shrek/s1.png'], 18)
-# television = Object('../objects/television/a_prop_TV.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
+shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
+television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
 rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
 
 
@@ -451,11 +451,11 @@ arvore.matriz.change_All(
 
 ### CASA E A PARTE INTERNA
 
-# house1.matriz.change_All(
-#                 [-30.0, -1.0, 30.0], 
-#                 [0.0, 1.0, 0.0], -30.0,  5.0,  30.0
-#                 [1.0, 1.0, 1.0])
-# house1.change_angle(176)
+house1.matriz.change_All(
+                [-30.0, -1.0, 30.0], 
+                [0.0, 1.0, 0.0],
+                [1.0, 1.0, 1.0])
+house1.change_angle(176)
 
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
@@ -479,11 +479,11 @@ yoshi.matriz.change_All(
                 [3.0, 3.0, 3.0])
 yoshi.change_angle(135)
 
-# television.matriz.change_All(
-#                 [-15.0, -1.0, 24.0], 
-#                 [0.0, 1.0, 0.0], 
-#                 [0.03, 0.03, 0.03])
-# television.change_angle(-45)
+television.matriz.change_All(
+                [-15.0, -1.0, 24.0], 
+                [0.0, 1.0, 0.0], 
+                [0.03, 0.03, 0.03])
+television.change_angle(-45)
 
 ##################################################
 
@@ -498,10 +498,10 @@ house2.matriz.change_All(
                 [1.0, 1.0, 1.0])
 house2.change_angle(-90)
 
-# shrek.matriz.change_All(
-#                 [20.0, -1.0, 20.0], 
-#                 [0.0, 1.0, 0.0], 
-#                 [0.2, 0.2, 0.2])
+shrek.matriz.change_All(
+                [20.0, -1.0, 20.0], 
+                [0.0, 1.0, 0.0], 
+                [0.2, 0.2, 0.2])
 
 rocket.matriz.change_All(
                 [75.0, 20.0, -50.0], 
@@ -518,8 +518,8 @@ while not glfw.window_should_close(window):
     color_cnt += 1
 
     car.matriz.change_T([0.0, -1.0, (-100.0+inc/1.5)])
-    rocket.matriz.change_T([75.0, 20.0, (50.0-inc/2)])
-    # shrek.change_angle(inc*25)
+    rocket.matriz.change_T([75.0, 20.0, (50.0-inc/3)])
+    shrek.change_angle(inc*20)
 
     glfw.poll_events() 
     
@@ -533,18 +533,18 @@ while not glfw.window_should_close(window):
     sky.desenha(model, program)
     terreno_pedra.desenha(model, program)
 
-    # house1.desenha(model, program)
+    house1.desenha(model, program)
     terreno_interno.desenha(model, program)
     chair.desenha(model, program)
     bed.desenha(model, program)
     
     yoshi.desenha(model, program)
-    # television.desenha(model,program)
+    television.desenha(model,program)
 
     spiderman.desenha(model, program)   
     house2.desenha(model, program)
     car.desenha(model, program)
-    # shrek.desenha(model, program)
+    shrek.desenha(model, program)
     rocket.desenha(model, program)
 
     for i in range(5):        

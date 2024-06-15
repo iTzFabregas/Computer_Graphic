@@ -183,7 +183,7 @@ fragment_code = """
         uniform float ks;
         uniform float ns;
         
-        uniform vec3 viewPos;=
+        uniform vec3 viewPos;
     
         varying vec2 out_texture;
         varying vec3 out_normal;
@@ -316,9 +316,9 @@ textures = glGenTextures(qtd_texturas)
 ### Vamos carregar cada modelo e sua(s) respectiva(s) textura(s)
 terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
-# house1 = Object('../objects/casa/casa.obj', ['../objects/casa/casa.jpg'], 1)
+# house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
 spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
-arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3) # TEM UM TRONCO E FOLHA
+arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
 # monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 5)
 chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6)
 yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7)
@@ -574,9 +574,8 @@ while not glfw.window_should_close(window):
     loc_projection = glGetUniformLocation(program, "projection")
     glUniformMatrix4fv(loc_projection, 1, GL_TRUE, mat_projection)    
     
-    # atualizando a posicao da camera/observador na GPU para calculo da reflexao especular
-    loc_view_pos = glGetUniformLocation(program, "viewPos") # recuperando localizacao da variavel viewPos na GPU
-    glUniform3f(loc_view_pos, cameraPos[0], cameraPos[1], cameraPos[2]) ### posicao da camer
+    loc_view_pos = glGetUniformLocation(program, "viewPos")
+    glUniform3f(loc_view_pos, cameraPos[0], cameraPos[1], cameraPos[2])
 
     glfw.swap_buffers(window)
 

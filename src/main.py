@@ -172,53 +172,74 @@ fragment_code = """
 
         #version 330 core
 
-        uniform vec3 lightPos; // define coordenadas de posicao da luz
-        vec3 lightColor = vec3(1.0, 1.0, 1.0);
+        uniform vec3 lightPos1;
+        vec3 lightColor1 = vec3(1.0, 1.0, 1.0);
+
+        uniform vec3 lightPos2;
+        uniform vec3 lightColor2;
+
+        uniform float ka;
+        uniform float kd;
+        uniform float ks;
+        uniform float ns;
         
-        uniform float ka; // coeficiente de reflexao ambiente
-        uniform float kd; // coeficiente de reflexao difusa
-        uniform float ks; // coeficiente de reflexao especular
-        uniform float ns; // expoente de reflexao especular
-        
-        uniform vec3 viewPos; // define coordenadas com a posicao da camera/observador
+        uniform vec3 viewPos;=
     
-        varying vec2 out_texture; // recebido do vertex shader
-        varying vec3 out_normal; // recebido do vertex shader
-        varying vec3 out_fragPos; // recebido do vertex shader
+        varying vec2 out_texture;
+        varying vec3 out_normal;
+        varying vec3 out_fragPos;
         uniform sampler2D samplerTexture;
         
-        
-        
         void main(){
-        
-            vec3 ambient = ka * lightColor;             
-        
-            vec3 lightDir = normalize(lightPos - out_fragPos);
+            
+            // LUZ 1 - LUZ DO PERSONAGEM (LANTERNA)
+
+            vec3 lightDir = lightPos1 - out_fragPos;
             float lightDistance = length(lightDir);
+
             lightDir = lightDir / lightDistance;
-
-            float attenuation = 1.0 /
-                (1.0f +
-                0.7f * lightDistance +
-                1.8f * lightDistance * lightDistance);
-
             vec3 norm = normalize(out_normal);
-            float diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse = kd * diff * lightColor * attenuation;
-
-
             vec3 viewDir = normalize(viewPos - out_fragPos);
+            float attenuation = 1.0 / (0.005 * (lightDistance * lightDistance));
+
+            vec3 ambient1 = ka * lightColor1;             
+
+            float diff = max(dot(norm, lightDir), 0.0);
+            vec3 diffuse1 = kd * diff * lightColor1 * attenuation;
+
             vec3 reflectDir = normalize(reflect(-lightDir, norm));
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
-            vec3 specular = ks * spec * lightColor * attenuation;             
+            vec3 specular1 = ks * spec * lightColor1 * attenuation;
             
 
+
+
+            // LUZ 2 - LUZ DA POLICIA (GIROFLEX)
+
+            lightDir = lightPos2 - out_fragPos;
+            lightDistance = length(lightDir);
+
+            lightDir = lightDir / lightDistance;
+            viewDir = normalize(viewPos - out_fragPos);
+            attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
+
+            vec3 ambient2 = 0.001 * lightColor2;             
+
+            diff = max(dot(norm, lightDir), 0.0);
+            vec3 diffuse2 = kd * diff * lightColor2 * attenuation;
+
+            reflectDir = normalize(reflect(-lightDir, norm));
+            spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
+            vec3 specular2 = 0.01 * spec * lightColor2 * attenuation;
+
+            // ADICIONANDO AS LUZES NOS OBJETOS
             vec4 texture = texture2D(samplerTexture, out_texture);
-            vec3 lighting = ambient + diffuse + specular;
+            vec3 lighting1 = ambient1 + diffuse1 + specular1;
+            vec3 lighting2 = ambient2 + diffuse2 + specular2;
+            vec3 lighting = lighting1 + lighting2;
             vec4 result = vec4(lighting,1.0) * texture;
 
             gl_FragColor = result;
-
         }
         """
 
@@ -365,8 +386,7 @@ glVertexAttribPointer(loc_normals_coord, 3, GL_FLOAT, False, stride, offset)
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 
-# cameraPos   = glm.vec3(-30.0,  5.0,  30.0);
-cameraPos   = glm.vec3(0,  15.0,  0);
+cameraPos   = glm.vec3(-30.0,  5.0,  30.0);
 cameraFront = glm.vec3(0.0,  0.0, -1.0);
 cameraUp    = glm.vec3(0.0,  1.0,  0.0);
 
@@ -468,7 +488,7 @@ yoshi.change_angle(135)
 ##################################################
 
 car.matriz.change_All(
-                [0.0, -1.0, -100.0],
+                [0.0, -1.0, -60.0],
                 [0.0, 1.0, 0.0],
                 [0.3, 0.3, 0.3])
 
@@ -489,9 +509,14 @@ rocket.matriz.change_All(
                 [0.005, 0.005, 0.005])
 rocket.change_angle(180)
 
+color_cnt = 0
+color_change = False
+
 while not glfw.window_should_close(window):
 
-    inc += 0.02
+    inc += 0.05
+    color_cnt += 1
+
     car.matriz.change_T([0.0, -1.0, (-100.0+inc/1.5)])
     rocket.matriz.change_T([75.0, 20.0, (50.0-inc/2)])
     # shrek.change_angle(inc*25)
@@ -528,9 +553,18 @@ while not glfw.window_should_close(window):
         arvore.matriz.change_T([arvore.matriz.t[0], arvore.matriz.t[1], i*(-20)])
         arvore.desenha(model, program)
 
-    loc_light_pos = glGetUniformLocation(program, "lightPos") # recuperando localizacao da variavel lightPos na GPU
-    # glUniform3f(loc_light_pos, math.cos(inc)*30,  15.0,  math.sin(inc)*30) ### posicao da fonte de luz
-    glUniform3f(loc_light_pos, cameraPos[0], cameraPos[1], cameraPos[2]) ### posicao da fonte de luz
+    loc_light_pos1 = glGetUniformLocation(program, "lightPos1")
+    glUniform3f(loc_light_pos1, cameraPos[0], cameraPos[1], cameraPos[2])
+
+    loc_light_pos2 = glGetUniformLocation(program, "lightPos2")
+    glUniform3f(loc_light_pos2, car.matriz.t[0], car.matriz.t[1], car.matriz.t[2])
+
+    if color_cnt % 50 == 0: color_change = not color_change
+
+    loc_light_color2 = glGetUniformLocation(program, "lightColor2")
+    if color_change: glUniform3f(loc_light_color2, 1.0, 0.0, 0.0)
+    else: glUniform3f(loc_light_color2, 0.0, 0.0, 1.0)
+
 
     mat_view = view()
     loc_view = glGetUniformLocation(program, "view")
@@ -547,4 +581,3 @@ while not glfw.window_should_close(window):
     glfw.swap_buffers(window)
 
 glfw.terminate()
--30.0,  5.0,  30.0

@@ -36,9 +36,9 @@ class Object:
         
         #### define parametros de ilumincao do modelo
         ka = 0.1 # coeficiente de reflexao ambiente do modelo
-        kd = 0.6 # coeficieznte de reflexao difusa do modelo
-        ks = 0.3 # coeficiente de reflexao especular do modelo
-        ns = 32.0 # expoente de reflexao especular
+        kd = 0.3 # coeficieznte de reflexao difusa do modelo
+        ks = 0.1 # coeficiente de reflexao especular do modelo
+        ns = 100.0 # expoente de reflexao especular
 
         loc_ka = glGetUniformLocation(program, "ka") # recuperando localizacao da variavel ka na GPU
         glUniform1f(loc_ka, ka) ### envia ka pra gpu

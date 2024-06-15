@@ -178,6 +178,10 @@ fragment_code = """
         uniform vec3 lightPos2;
         uniform vec3 lightColor2;
 
+        vec3 lightPos3 = vec3(-30.0,  7.0,  30.0);
+        vec3 lightColor3 = vec3(1.0, 1.0, 1.0);
+        
+
         uniform float ka;
         uniform float kd;
         uniform float ks;
@@ -223,20 +227,40 @@ fragment_code = """
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient2 = 0.001 * lightColor2;             
+            vec3 ambient2 = 0.01 * lightColor2;             
 
             diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse2 = kd * diff * lightColor2 * attenuation;
+            vec3 diffuse2 = 0.5 * diff * lightColor2 * attenuation;
 
             reflectDir = normalize(reflect(-lightDir, norm));
             spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
             vec3 specular2 = 0.01 * spec * lightColor2 * attenuation;
 
+
+            // LUZ 3 - LUZ INTERNA
+
+            lightDir = -(lightPos1 - out_fragPos);
+            lightDistance = length(lightDir);
+
+            lightDir = lightDir / lightDistance;
+            viewDir = normalize(viewPos - out_fragPos);
+            attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
+
+            vec3 ambient3 = ka * lightColor3;             
+
+            diff = max(dot(norm, lightDir), 0.0);
+            vec3 diffuse3 = kd * diff * lightColor3 * attenuation;
+
+            reflectDir = normalize(reflect(-lightDir, norm));
+            spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
+            vec3 specular3 = 0.01 * spec * lightColor3 * attenuation;
+
             // ADICIONANDO AS LUZES NOS OBJETOS
             vec4 texture = texture2D(samplerTexture, out_texture);
             vec3 lighting1 = ambient1 + diffuse1 + specular1;
             vec3 lighting2 = ambient2 + diffuse2 + specular2;
-            vec3 lighting = lighting1 + lighting2;
+            vec3 lighting3 = ambient3 + diffuse3 + specular3;
+            vec3 lighting = lighting1 + lighting2 + lighting3;
             vec4 result = vec4(lighting,1.0) * texture;
 
             gl_FragColor = result;
@@ -319,13 +343,12 @@ terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/
 house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
 spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
 arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
-# monstro = Object('../objects/monstro/monstro.obj', ['../objects/monstro/monstro.jpg'], 5)
 chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6)
 yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7)
 house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 8)
-bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_bob.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_barrel.png'], 9)
+bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_barrel.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_bob.png'], 9)
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
-field = Object('../objects/field/field1.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
+field = Object('../objects/field/field1.obj'    , ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
 shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
 television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
@@ -425,7 +448,7 @@ inc = 0
 terreno_pedra.matriz.change_All(
                 [0.0, -0.9, -100,0], 
                 [0.0, 0.0, 1.0], 
-                [3.0, 0.1, 200.0])
+                [2.0, 0.1, 200.0])
 
 field.matriz.change_All(
                 [4.0, -1.0, 0,0], 
@@ -460,7 +483,7 @@ house1.change_angle(176)
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
                 [0.0, 1.0, 0.0], 
-                [5.0, 0.1, 1.8])
+                [5.0, 0.1, 1.9])
 
 chair.matriz.change_All(
                 [-30.0, -1.0, 24.0], 

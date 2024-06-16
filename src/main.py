@@ -253,7 +253,7 @@ bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
 field = Object('../objects/field/field.obj', ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
-shrek = Object('../objects/Shrek/shrek.obj', ['../objects/Shrek/s2.png', '../objects/Shrek/s1.png'], 18)
+shrek = Object('../objects/Shrek/shrek.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
 television = Object('../objects/television/a_prop_TV.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
 rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
 

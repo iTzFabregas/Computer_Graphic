@@ -227,7 +227,7 @@ fragment_code = """
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient2 = 0.01 * lightColor2;             
+            vec3 ambient2 = 0.001 * lightColor2;             
 
             diff = max(dot(norm, lightDir), 0.0);
             vec3 diffuse2 = 0.5 * diff * lightColor2 * attenuation;

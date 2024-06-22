@@ -15,6 +15,7 @@ min_x, max_x = -80, 80
 min_y, max_y = 5,50
 min_z, max_z = -80,80
 
+lantern_on = True
 
 # Função que não permite o usuário passar do extremos no mapa 
 def clamp(value, min_value, max_value):
@@ -25,7 +26,7 @@ def clamp(value, min_value, max_value):
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 def key_event(window,key,scancode,action,mods):
-    global cameraPos, cameraFront, cameraUp, polygonal_mode, inc_fov, inc_near, inc_far, cameraUp, inc_view_up
+    global cameraPos, cameraFront, cameraUp, polygonal_mode, inc_fov, inc_near, inc_far, cameraUp, inc_view_up, lantern_on
 
     if key == 66:
         inc_view_up += 0.1
@@ -71,6 +72,10 @@ def key_event(window,key,scancode,action,mods):
         shrek.matriz.change_S([shrek.matriz.s[0] - 0.001, shrek.matriz.s[1] - 0.001, shrek.matriz.s[2] - 0.001])
 
     if key == 80 and action == 1: polygonal_mode = not polygonal_mode
+
+    #Tecla L, alternar lanterna ligada ou desligada
+    if key == 76 and action == 1: lantern_on = not lantern_on
+
 
 def mouse_event(window, xpos, ypos):
     global firstMouse, cameraFront, yaw, pitch, lastX, lastY
@@ -171,6 +176,7 @@ vertex_code = """
 fragment_code = """
 
         #version 330 core
+        uniform bool lantern_on;
 
         uniform vec3 lightPos1;
         vec3 lightColor1 = vec3(1.0, 1.0, 1.0);
@@ -178,8 +184,8 @@ fragment_code = """
         uniform vec3 lightPos2;
         uniform vec3 lightColor2;
 
-        vec3 lightPos3 = vec3(-30.0,  7.0,  30.0);
-        vec3 lightColor3 = vec3(1.0, 1.0, 1.0);
+        uniform vec3 lightPos3;
+        vec3 lightColor3 = vec3(1.0, 1.0, 0.7);
         
 
         uniform float ka;
@@ -206,14 +212,14 @@ fragment_code = """
             vec3 viewDir = normalize(viewPos - out_fragPos);
             float attenuation = 1.0 / (0.005 * (lightDistance * lightDistance));
 
-            vec3 ambient1 = ka * lightColor1;             
+            vec3 ambient1 = ka * lightColor1 * (lantern_on ? 1.0 : 0.0);
 
             float diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse1 = kd * diff * lightColor1 * attenuation;
+            vec3 diffuse1 = kd * diff * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0);
 
             vec3 reflectDir = normalize(reflect(-lightDir, norm));
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
-            vec3 specular1 = ks * spec * lightColor1 * attenuation;
+            vec3 specular1 = ks * spec * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0);
             
 
 
@@ -227,7 +233,7 @@ fragment_code = """
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient2 = 0.001 * lightColor2;             
+            vec3 ambient2 = 0.001 * lightColor2;
 
             diff = max(dot(norm, lightDir), 0.0);
             vec3 diffuse2 = 0.5 * diff * lightColor2 * attenuation;
@@ -239,14 +245,14 @@ fragment_code = """
 
             // LUZ 3 - LUZ INTERNA
 
-            lightDir = -(lightPos1 - out_fragPos);
+            lightDir = (lightPos3 - out_fragPos);
             lightDistance = length(lightDir);
 
             lightDir = lightDir / lightDistance;
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient3 = ka * lightColor3;             
+            vec3 ambient3 = ka * lightColor3;
 
             diff = max(dot(norm, lightDir), 0.0);
             vec3 diffuse3 = kd * diff * lightColor3 * attenuation;
@@ -280,6 +286,7 @@ fragment = glCreateShader(GL_FRAGMENT_SHADER)
 # Set shaders source
 glShaderSource(vertex, vertex_code)
 glShaderSource(fragment, fragment_code)
+
 
 
 
@@ -341,6 +348,7 @@ textures = glGenTextures(qtd_texturas)
 terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
 house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
+house_interior = Object('../objects/casa/casa_interior.obj', ['../objects/casa/casa.jpg'], 1)
 spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
 arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
 chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6)
@@ -401,7 +409,6 @@ offset = ctypes.c_void_p(0)
 loc_normals_coord = glGetAttribLocation(program, "normals")
 glEnableVertexAttribArray(loc_normals_coord)
 glVertexAttribPointer(loc_normals_coord, 3, GL_FLOAT, False, stride, offset)
-
 
 
 
@@ -480,6 +487,13 @@ house1.matriz.change_All(
                 [1.0, 1.0, 1.0])
 house1.change_angle(176)
 
+house_interior.matriz.change_All(
+                [-30.0, -0.98, 30.0], 
+                [0.0, 1.0, 0.0],
+                [0.99, 0.99, 0.99])
+house_interior.change_angle(176)
+
+
 terreno_interno.matriz.change_All(
                 [-28.0, -0.9, 30.0], 
                 [0.0, 1.0, 0.0], 
@@ -548,6 +562,12 @@ while not glfw.window_should_close(window):
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glClearColor(1.0, 1.0, 1.0, 1.0)
+
+    # Atualiza estado da lanterna
+    loc_lantern_on = glGetUniformLocation(program, "lantern_on")
+    glUniform1i(loc_lantern_on, int(lantern_on))
+
+
     
     if polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_LINE)
     if not polygonal_mode: glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
@@ -557,6 +577,7 @@ while not glfw.window_should_close(window):
     terreno_pedra.desenha(model, program)
 
     house1.desenha(model, program)
+    house_interior.desenha(model,program)
     terreno_interno.desenha(model, program)
     chair.desenha(model, program)
     bed.desenha(model, program)
@@ -582,12 +603,14 @@ while not glfw.window_should_close(window):
     loc_light_pos2 = glGetUniformLocation(program, "lightPos2")
     glUniform3f(loc_light_pos2, car.matriz.t[0], car.matriz.t[1], car.matriz.t[2])
 
+    loc_light_pos3 = glGetUniformLocation(program, "lightPos3")
+    glUniform3f(loc_light_pos3,house1.matriz.t[0], house1.matriz.t[1] + 8, house1.matriz.t[2])
+
     if color_cnt % 50 == 0: color_change = not color_change
 
     loc_light_color2 = glGetUniformLocation(program, "lightColor2")
     if color_change: glUniform3f(loc_light_color2, 1.0, 0.0, 0.0)
     else: glUniform3f(loc_light_color2, 0.0, 0.0, 1.0)
-
 
     mat_view = view()
     loc_view = glGetUniformLocation(program, "view")

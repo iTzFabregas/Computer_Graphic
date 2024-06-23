@@ -381,7 +381,7 @@ car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_00
 shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
 television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20, True)
 rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
-
+star = Object('../objects/star/star.obj', ['../objects/star/star.png'], 23, True)
 
 
 ### Para enviar nossos dados da CPU para a GPU, precisamos requisitar slots.
@@ -507,6 +507,12 @@ house1.matriz.change_All(
                 [1.0, 1.0, 1.0])
 house1.change_angle(176)
 
+star.matriz.change_All(
+                [-30.0, 8.0, 30.0], 
+                [0.0, 1.0, 0.0],
+                [0.1, 0.1, 0.1])
+star.change_angle(86)
+
 house_interior.matriz.change_All(
                 [-30.0, -0.98, 30.0], 
                 [0.0, 1.0, 0.0],
@@ -523,7 +529,7 @@ chair.matriz.change_All(
                 [-30.0, -1.0, 24.0], 
                 [0.0, 1.0, 0.0], 
                 [4.8, 5.0, 5.0])
-                
+
 bed.matriz.change_All(
                 [-38.0, -1.0, 31.5], 
                 [0.0, 1.0, 0.0], 
@@ -611,6 +617,7 @@ while not glfw.window_should_close(window):
     terreno_pedra.desenha(model, program)
 
     house1.desenha(model, program)
+    star.desenha(model, program)
     house_interior.desenha(model,program)
     terreno_interno.desenha(model, program)
     chair.desenha(model, program)
@@ -638,7 +645,7 @@ while not glfw.window_should_close(window):
     glUniform3f(loc_light_pos2, car.matriz.t[0], car.matriz.t[1], car.matriz.t[2])
 
     loc_light_pos3 = glGetUniformLocation(program, "lightPos3")
-    glUniform3f(loc_light_pos3,house1.matriz.t[0], house1.matriz.t[1] + 8, house1.matriz.t[2])
+    glUniform3f(loc_light_pos3,star.matriz.t[0], star.matriz.t[1], star.matriz.t[2])
 
     if color_cnt % 50 == 0: color_change = not color_change
 

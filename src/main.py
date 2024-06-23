@@ -199,11 +199,12 @@ fragment_code = """
         varying vec3 out_normal;
         varying vec3 out_fragPos;
         uniform sampler2D samplerTexture;
-        
+
+        uniform bool is_inside;
+
         void main(){
             
             // LUZ 1 - LUZ DO PERSONAGEM (LANTERNA)
-
             vec3 lightDir = lightPos1 - out_fragPos;
             float lightDistance = length(lightDir);
 
@@ -220,12 +221,10 @@ fragment_code = """
             vec3 reflectDir = normalize(reflect(-lightDir, norm));
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
             vec3 specular1 = ks * spec * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0);
-            
 
 
 
             // LUZ 2 - LUZ DA POLICIA (GIROFLEX)
-
             lightDir = lightPos2 - out_fragPos;
             lightDistance = length(lightDir);
 
@@ -244,7 +243,6 @@ fragment_code = """
 
 
             // LUZ 3 - LUZ INTERNA
-
             lightDir = (lightPos3 - out_fragPos);
             lightDistance = length(lightDir);
 
@@ -266,7 +264,13 @@ fragment_code = """
             vec3 lighting1 = ambient1 + diffuse1 + specular1;
             vec3 lighting2 = ambient2 + diffuse2 + specular2;
             vec3 lighting3 = ambient3 + diffuse3 + specular3;
-            vec3 lighting = lighting1 + lighting2 + lighting3;
+
+            vec3 lighting;
+            if(!is_inside){
+                lighting = lighting1 + lighting2 + ka * lightColor1;
+            }else{
+                lighting = lighting1 + lighting3;
+            }
             vec4 result = vec4(lighting,1.0) * texture;
 
             gl_FragColor = result;
@@ -346,20 +350,20 @@ textures = glGenTextures(qtd_texturas)
 
 ### Vamos carregar cada modelo e sua(s) respectiva(s) textura(s)
 terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
-terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
+terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0, True)
 house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
-house_interior = Object('../objects/casa/casa_interior.obj', ['../objects/casa/casa.jpg'], 1)
+house_interior = Object('../objects/casa/casa_interior.obj', ['../objects/casa/casa.jpg'], 1, True)
 spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
 arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
-chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6)
-yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7)
+chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6, True)
+yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7, True)
 house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 8)
-bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_barrel.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_bob.png'], 9)
+bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_barrel.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_bob.png'], 9, True)
 sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
 field = Object('../objects/field/field1.obj'    , ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
 car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
 shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
-television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20)
+television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20, True)
 rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
 
 

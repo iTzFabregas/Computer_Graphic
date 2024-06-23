@@ -5,8 +5,8 @@ from load import load_model_from_file, processando_modelo, load_texture_from_fil
 # Classe que guarda as informações de cada objeto, como vertices e texturas e a função de mudar o angulo e de desenhar na tela
 class Object:
 
-    def __init__(self, url_model, urls_textures, start_id_texture):
-        
+    def __init__(self, url_model, urls_textures, start_id_texture, is_inside=False):
+
         modelo = load_model_from_file(url_model)
 
         print('Processando modelo: ' + url_model)
@@ -24,7 +24,8 @@ class Object:
         self.angle = 0
         self.textures_verts = textures_verts
         self.start_id_texture = start_id_texture
-    
+        self.is_inside = is_inside
+
     def change_angle(self, angle):
         self.angle = angle
 
@@ -33,7 +34,7 @@ class Object:
         mat_model = model(self.angle, self.matriz)
         loc_model = glGetUniformLocation(program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
-        
+
         #### define parametros de ilumincao do modelo
         ka = 0.1 # coeficiente de reflexao ambiente do modelo
         kd = 0.3 # coeficieznte de reflexao difusa do modelo
@@ -52,7 +53,9 @@ class Object:
         loc_ns = glGetUniformLocation(program, "ns") # recuperando localizacao da variavel ns na GPU
         glUniform1f(loc_ns, ns) ### envia ns pra gpu            
 
+        loc_is_inside = glGetUniformLocation(program, "is_inside")
+        glUniform1i(loc_is_inside, self.is_inside)
+
         for i in range(0, len(self.textures_verts)-1):
-            glBindTexture(GL_TEXTURE_2D, self.start_id_texture + i)        
+            glBindTexture(GL_TEXTURE_2D, self.start_id_texture + i)
             glDrawArrays(GL_TRIANGLES, self.textures_verts[i], self.textures_verts[i+1] - self.textures_verts[i])
-            

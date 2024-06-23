@@ -17,6 +17,8 @@ min_z, max_z = -80,80
 
 lantern_on = True
 
+inc_amb = inc_spec = inc_dif = 1.0
+
 # Função que não permite o usuário passar do extremos no mapa 
 def clamp(value, min_value, max_value):
     return max(min_value, min(max_value, value))
@@ -26,7 +28,7 @@ def clamp(value, min_value, max_value):
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 def key_event(window,key,scancode,action,mods):
-    global cameraPos, cameraFront, cameraUp, polygonal_mode, inc_fov, inc_near, inc_far, cameraUp, inc_view_up, lantern_on
+    global cameraPos, cameraFront, cameraUp, polygonal_mode, inc_fov, inc_near, inc_far, cameraUp, inc_view_up, lantern_on, inc_amb, inc_dif, inc_spec
 
     if key == 66:
         inc_view_up += 0.1
@@ -75,6 +77,23 @@ def key_event(window,key,scancode,action,mods):
 
     #Tecla L, alternar lanterna ligada ou desligada
     if key == 76 and action == 1: lantern_on = not lantern_on
+
+    # tecla 1 diminui iluminação ambiental e 2 aumenta
+    if key == 49 and (action == 1 or action == 2) : inc_amb -=0.1
+    if key == 50 and (action == 1 or action == 2) : inc_amb +=0.1
+
+    # tecla 3 diminui iluminação difusa e 4 aumenta
+    if key == 51 and (action == 1 or action == 2) : inc_dif -=0.1
+    if key == 52 and (action == 1 or action == 2) : inc_dif +=0.1
+
+    # tecla 5 diminui iluminação ambiental e 6 aumenta
+    if key == 53 and (action == 1 or action == 2) : inc_spec -=0.1
+    if key == 54 and (action == 1 or action == 2) : inc_spec +=0.1
+
+    inc_amb = clamp(inc_amb, 0.0, 50)
+    inc_dif = clamp(inc_dif, 0.0, 50)
+    inc_spec = clamp(inc_spec, 0.0, 50)
+
 
 
 def mouse_event(window, xpos, ypos):
@@ -155,21 +174,20 @@ vertex_code = """
         attribute vec3 position;
         attribute vec2 texture_coord;
         attribute vec3 normals;
-        
-       
+
         varying vec2 out_texture;
         varying vec3 out_fragPos;
         varying vec3 out_normal;
-                
+
         uniform mat4 model;
         uniform mat4 view;
-        uniform mat4 projection;        
-        
+        uniform mat4 projection;
+
         void main(){
             gl_Position = projection * view * model * vec4(position,1.0);
             out_texture = texture_coord;
             out_fragPos = vec3(model * vec4(position, 1.0));
-            out_normal = mat3(transpose(inverse(model))) * normals;       
+            out_normal = mat3(transpose(inverse(model))) * normals;
         }
         """
 
@@ -186,15 +204,19 @@ fragment_code = """
 
         uniform vec3 lightPos3;
         vec3 lightColor3 = vec3(1.0, 1.0, 0.7);
-        
+
 
         uniform float ka;
         uniform float kd;
         uniform float ks;
         uniform float ns;
-        
+
+        uniform float inc_amb;
+        uniform float inc_spec;
+        uniform float inc_dif;
+
         uniform vec3 viewPos;
-    
+
         varying vec2 out_texture;
         varying vec3 out_normal;
         varying vec3 out_fragPos;
@@ -203,7 +225,10 @@ fragment_code = """
         uniform bool is_inside;
 
         void main(){
-            
+
+        vec3 interior_amb = ka * lightColor3 * inc_amb;
+        vec3 exterior_amb = ka * lightColor1 * inc_amb;
+
             // LUZ 1 - LUZ DO PERSONAGEM (LANTERNA)
             vec3 lightDir = lightPos1 - out_fragPos;
             float lightDistance = length(lightDir);
@@ -213,16 +238,12 @@ fragment_code = """
             vec3 viewDir = normalize(viewPos - out_fragPos);
             float attenuation = 1.0 / (0.005 * (lightDistance * lightDistance));
 
-            vec3 ambient1 = ka * lightColor1 * (lantern_on ? 1.0 : 0.0);
-
             float diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse1 = kd * diff * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0);
+            vec3 diffuse1 = kd * diff * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0) * inc_dif;
 
             vec3 reflectDir = normalize(reflect(-lightDir, norm));
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
-            vec3 specular1 = ks * spec * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0);
-
-
+            vec3 specular1 = ks * spec * lightColor1 * attenuation * (lantern_on ? 1.0 : 0.0) * inc_spec;
 
             // LUZ 2 - LUZ DA POLICIA (GIROFLEX)
             lightDir = lightPos2 - out_fragPos;
@@ -232,14 +253,12 @@ fragment_code = """
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient2 = 0.001 * lightColor2;
-
             diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse2 = 0.5 * diff * lightColor2 * attenuation;
+            vec3 diffuse2 = 0.5 * diff * lightColor2 * attenuation * inc_dif;
 
             reflectDir = normalize(reflect(-lightDir, norm));
             spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
-            vec3 specular2 = 0.01 * spec * lightColor2 * attenuation;
+            vec3 specular2 = 0.01 * spec * lightColor2 * attenuation * inc_spec;
 
 
             // LUZ 3 - LUZ INTERNA
@@ -250,29 +269,26 @@ fragment_code = """
             viewDir = normalize(viewPos - out_fragPos);
             attenuation = 1.0 / (0.0025 * (lightDistance * lightDistance));
 
-            vec3 ambient3 = ka * lightColor3;
-
             diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse3 = kd * diff * lightColor3 * attenuation;
+            vec3 diffuse3 = kd * diff * lightColor3 * attenuation * inc_dif;
 
             reflectDir = normalize(reflect(-lightDir, norm));
             spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
-            vec3 specular3 = 0.01 * spec * lightColor3 * attenuation;
+            vec3 specular3 = 0.01 * spec * lightColor3 * attenuation * inc_spec;
 
             // ADICIONANDO AS LUZES NOS OBJETOS
             vec4 texture = texture2D(samplerTexture, out_texture);
-            vec3 lighting1 = ambient1 + diffuse1 + specular1;
-            vec3 lighting2 = ambient2 + diffuse2 + specular2;
-            vec3 lighting3 = ambient3 + diffuse3 + specular3;
+            vec3 lighting1 = diffuse1 + specular1;
+            vec3 lighting2 = diffuse2 + specular2;
+            vec3 lighting3 = diffuse3 + specular3;
 
             vec3 lighting;
             if(!is_inside){
-                lighting = lighting1 + lighting2 + ka * lightColor1;
+                lighting = lighting1 + lighting2 + exterior_amb;
             }else{
-                lighting = lighting1 + lighting3;
+                lighting = lighting1 + lighting3 + interior_amb;
             }
             vec4 result = vec4(lighting,1.0) * texture;
-
             gl_FragColor = result;
         }
         """
@@ -570,6 +586,20 @@ while not glfw.window_should_close(window):
     # Atualiza estado da lanterna
     loc_lantern_on = glGetUniformLocation(program, "lantern_on")
     glUniform1i(loc_lantern_on, int(lantern_on))
+
+    # Atualiza estado dos inc das iluminações
+
+    loc_inc_amb = glGetUniformLocation(program, "inc_amb")
+    glUniform1f(loc_inc_amb, inc_amb)
+
+    loc_inc_dif = glGetUniformLocation(program, "inc_dif")
+    glUniform1f(loc_inc_dif, inc_dif)
+
+    loc_inc_spec = glGetUniformLocation(program, "inc_spec")
+    glUniform1f(loc_inc_spec, inc_spec)
+
+
+
 
 
     

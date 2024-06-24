@@ -3,9 +3,16 @@ from load import load_model_from_file, processando_modelo, load_texture_from_fil
 
 
 # Classe que guarda as informações de cada objeto, como vertices e texturas e a função de mudar o angulo e de desenhar na tela
+class Material:
+    def __init__(self, name, ka, kd, ks, ns):
+        self.name = name
+        self.ka = ka
+        self.kd = kd
+        self.ks = ks
+        self.ns = ns
 class Object:
 
-    def __init__(self, url_model, urls_textures, start_id_texture, is_inside=False):
+    def __init__(self, url_model, urls_textures, start_id_texture, material, is_inside=False):
 
         modelo = load_model_from_file(url_model)
 
@@ -25,6 +32,7 @@ class Object:
         self.textures_verts = textures_verts
         self.start_id_texture = start_id_texture
         self.is_inside = is_inside
+        self.material = material
 
     def change_angle(self, angle):
         self.angle = angle
@@ -36,10 +44,10 @@ class Object:
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
 
         #### define parametros de ilumincao do modelo
-        ka = 0.1 # coeficiente de reflexao ambiente do modelo
-        kd = 0.3 # coeficieznte de reflexao difusa do modelo
-        ks = 0.1 # coeficiente de reflexao especular do modelo
-        ns = 100.0 # expoente de reflexao especular
+        ka = self.material.ka # coeficiente de reflexao ambiente do modelo
+        kd = self.material.kd # coeficieznte de reflexao difusa do modelo
+        ks = self.material.ks # coeficiente de reflexao especular do modelo
+        ns = self.material.ns #expoente de reflexao especular
 
         loc_ka = glGetUniformLocation(program, "ka") # recuperando localizacao da variavel ka na GPU
         glUniform1f(loc_ka, ka) ### envia ka pra gpu

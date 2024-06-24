@@ -5,7 +5,7 @@
 #        Vitor Nishimura Vian NUSP: 5255289
 
 from globals import *
-from sprites import Object
+from sprites import Object, Material
 
 qtd_texturas = 25
 altura = 1600
@@ -17,7 +17,7 @@ min_z, max_z = -80,80
 
 lantern_on = True
 
-inc_amb = inc_spec = inc_dif = 1.0
+inc_amb = inc_spec = inc_dif = 0.6
 
 # Função que não permite o usuário passar do extremos no mapa 
 def clamp(value, min_value, max_value):
@@ -363,25 +363,33 @@ glEnable(GL_TEXTURE_2D)
 textures = glGenTextures(qtd_texturas)
 
 
+#Definindo materiais
+madeira = Material("madeira", 0.1, 0.6, 0.05, 15)
+metal = Material("metal", 0.05, 0.3, 0.9, 200)
+tecido = Material("tecido", 0.15, 0.7, 0.1, 10)
+pedra = Material("pedra", 0.2, 0.6, 0.1, 15)
+pele = Material("pele", 0.15, 0.7, 0.3, 50)
+ceu = Material("céu", 0.5, 0.001, 0.001, 10)
+grama = Material("grama", 0.25, 0.7, 0.15, 20)
 
 ### Vamos carregar cada modelo e sua(s) respectiva(s) textura(s)
-terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0)
-terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 0, True)
-house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1)
-house_interior = Object('../objects/casa/casa_interior.obj', ['../objects/casa/casa.jpg'], 1, True)
-spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'], 2)
-arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3)
-chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6, True)
-yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7, True)
-house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 8)
-bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_barrel.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_bob.png'], 9, True)
-sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12)
-field = Object('../objects/field/field1.obj'    , ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14)
-car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17)
-shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18)
-television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20, True)
-rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21)
-star = Object('../objects/star/star.obj', ['../objects/star/star.png'], 23, True)
+terreno_pedra = Object('../objects/terreno/terreno.obj', ['../objects/terreno/caminho_tijolo.jpg'], 0, pedra)
+terreno_interno = Object('../objects/terreno/terreno.obj', ['../objects/terreno/pedra.jpg'], 30,pedra, True)
+house1 = Object('../objects/casa/casa1.obj', ['../objects/casa/casa.jpg'], 1, madeira)
+house_interior = Object('../objects/casa/casa_interior.obj', ['../objects/casa/casa.jpg'], 1, madeira, True)
+spiderman = Object('../objects/spiderman/spiderman.obj', ['../objects/spiderman/spiderman.png'],2, tecido)
+arvore = Object('../objects/arvore/arvore.obj', ['../objects/arvore/bark_0021.jpg', '../objects/arvore/DB2X2_L01.png'], 3, madeira)
+chair = Object('../objects/chair/chair_01.obj', ['../objects/chair/Textures/chair_01_Base_Color.png'], 6, madeira, True)
+yoshi = Object('../objects/yoshi/Yoshi(Super Mario Maker).obj', ['../objects/yoshi/SMMYoshi.png'], 7, pele, True)
+house2 = Object('../objects/squidward/MSH_SquidwardHouse.obj', ['../objects/squidward/TEX_SquidwardHouse.png'], 8, pedra)
+bed = Object('../objects/SpongeBobBed/MSH_boss3.obj', ['../objects/SpongeBobBed/TEX_boss3_barrel.png', '../objects/SpongeBobBed/TEX_boss3_bed.png', '../objects/SpongeBobBed/TEX_boss3_bob.png'], 9,tecido, True)
+sky = Object('../objects/sky/275out.obj', ['../objects/sky/275_lp_di1mt55p.png', '../objects/sky/275_di1mt81p.png'], 12, ceu)
+field = Object('../objects/field/field1.obj'    , ['../objects/field/76BACB49_c.png', '../objects/field/35BF7BB8_c.png', '../objects/field/32F6789_c.png'], 14, grama)
+car = Object('../objects/PoliceCar/policecar.obj', ['../objects/PoliceCar/Tex_0017_0.png'], 17, metal)
+shrek = Object('../objects/Shrek/shrek1.obj', ['../objects/Shrek/s1.png', '../objects/Shrek/s2.png'], 18, tecido)
+television = Object('../objects/television/a_prop_TV1.obj', ['../objects/television/prop_TV_Lib.tga.png'], 20,metal, True)
+rocket = Object('../objects/Rocket/obj0.obj', ['../objects/Rocket/0.png'], 21, metal)
+star = Object('../objects/star/star.obj', ['../objects/star/star.png'], 23, metal, True)
 
 
 ### Para enviar nossos dados da CPU para a GPU, precisamos requisitar slots.
@@ -475,7 +483,7 @@ inc = 0
 terreno_pedra.matriz.change_All(
                 [0.0, -0.9, -100,0], 
                 [0.0, 0.0, 1.0], 
-                [2.0, 0.1, 200.0])
+                [2.0, 0.1, 45.0])
 
 field.matriz.change_All(
                 [4.0, -1.0, 0,0], 

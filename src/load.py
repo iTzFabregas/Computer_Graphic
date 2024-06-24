@@ -1,14 +1,7 @@
 from globals import *
 
 # ### Carregando Modelos (vértices e texturas) a partir de Arquivos
-# 
 # A função abaixo carrega modelos a partir de arquivos no formato WaveFront.
-# 
-# 
-# Para saber mais sobre o modelo, acesse: https://en.wikipedia.org/wiki/Wavefront_.obj_file
-# 
-# 
-# Nos slides e vídeo-aula da Aula 11 - Parte 1, nós descrevemos o funcionamento desse formato.
 
 def load_texture_from_file(texture_id, img_textura):
     glBindTexture(GL_TEXTURE_2D, texture_id)
@@ -84,7 +77,7 @@ def processando_modelo(modelo):
 
     global vertices_list, textures_coord_list, normals_list
     ### inserindo vertices do modelo no vetor de vertices
-   
+
     textures_verts = []
     faces_visited = []
     for face in modelo['faces']:
@@ -92,14 +85,13 @@ def processando_modelo(modelo):
         if face[3] not in faces_visited:
             faces_visited.append(face[3])
             textures_verts.append(len(vertices_list))
-            
         for vertice_id in face[0]:
             vertices_list.append( modelo['vertices'][vertice_id-1] )
         for texture_id in face[1]:
             textures_coord_list.append( modelo['texture'][texture_id-1] )
         for normal_id in face[2]:
             normals_list.append( modelo['normals'][normal_id-1] )
-            
+
     textures_verts.append(len(vertices_list))
 
     return textures_verts

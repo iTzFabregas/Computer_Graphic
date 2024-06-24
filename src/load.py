@@ -1,14 +1,7 @@
 from globals import *
 
 # ### Carregando Modelos (vértices e texturas) a partir de Arquivos
-# 
 # A função abaixo carrega modelos a partir de arquivos no formato WaveFront.
-# 
-# 
-# Para saber mais sobre o modelo, acesse: https://en.wikipedia.org/wiki/Wavefront_.obj_file
-# 
-# 
-# Nos slides e vídeo-aula da Aula 11 - Parte 1, nós descrevemos o funcionamento desse formato.
 
 def load_texture_from_file(texture_id, img_textura):
     glBindTexture(GL_TEXTURE_2D, texture_id)
@@ -26,10 +19,10 @@ def load_texture_from_file(texture_id, img_textura):
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 
 def load_model_from_file(filename):
-
     """Loads a Wavefront OBJ file. """
     objects = {}
     vertices = []
+    normals = []
     texture_coords = []
     faces = []
 
@@ -46,6 +39,9 @@ def load_model_from_file(filename):
         if values[0] == 'v':
             vertices.append(values[1:4])
 
+        ### recuperando vertices
+        if values[0] == 'vn':
+            normals.append(values[1:4])
 
         ### recuperando coordenadas de textura
         elif values[0] == 'vt':
@@ -57,40 +53,44 @@ def load_model_from_file(filename):
         elif values[0] == 'f':
             face = []
             face_texture = []
+            face_normals = []
             for v in values[1:]:
                 w = v.split('/')
                 face.append(int(w[0]))
+                face_normals.append(int(w[2]))
                 if len(w) >= 2 and len(w[1]) > 0:
                     face_texture.append(int(w[1]))
                 else:
                     face_texture.append(0)
 
-            faces.append((face, face_texture, material))
+            faces.append((face, face_texture, face_normals, material))
 
     model = {}
     model['vertices'] = vertices
     model['texture'] = texture_coords
     model['faces'] = faces
+    model['normals'] = normals
 
     return model
 
 def processando_modelo(modelo):
 
-    global vertices_list, textures_coord_list
+    global vertices_list, textures_coord_list, normals_list
     ### inserindo vertices do modelo no vetor de vertices
-   
+
     textures_verts = []
     faces_visited = []
     for face in modelo['faces']:
 
-        if face[2] not in faces_visited:
-            faces_visited.append(face[2])
+        if face[3] not in faces_visited:
+            faces_visited.append(face[3])
             textures_verts.append(len(vertices_list))
-            
         for vertice_id in face[0]:
             vertices_list.append( modelo['vertices'][vertice_id-1] )
         for texture_id in face[1]:
             textures_coord_list.append( modelo['texture'][texture_id-1] )
+        for normal_id in face[2]:
+            normals_list.append( modelo['normals'][normal_id-1] )
 
     textures_verts.append(len(vertices_list))
 

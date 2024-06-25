@@ -156,7 +156,7 @@ def view():
 def projection():
     global altura, largura, inc_fov, inc_near, inc_far
     # perspective parameters: fovy, aspect, near, far
-    mat_projection = glm.perspective(glm.radians(45.0), largura/altura, 0.1, 1000.0)
+    mat_projection = glm.perspective(glm.radians(45.0), largura/altura, 0.1, 2000.0)
     mat_projection = np.array(mat_projection)    
     return mat_projection
 

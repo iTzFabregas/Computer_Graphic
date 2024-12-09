@@ -23,6 +23,9 @@ inc_amb = inc_spec = inc_dif = 0.6
 def clamp(value, min_value, max_value):
     return max(min_value, min(max_value, value))
 
+def normalize(vector):
+    return vector / np.linalg.norm(vector)
+
 
 ### Eventos para modificar a posição da câmera.
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
@@ -46,14 +49,15 @@ def key_event(window,key,scancode,action,mods):
         cameraPos -= cameraSpeed * cameraFront
     
     if key == 65 and (action==1 or action==2): # tecla A
-        cameraPos -= glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
+        cameraPos -= normalize(np.cross(cameraFront, cameraUp)) * cameraSpeed
         
     if key == 68 and (action==1 or action==2): # tecla D
-        cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
+        cameraPos += normalize(np.cross(cameraFront, cameraUp)) * cameraSpeed
 
-    cameraPos.x = clamp(cameraPos.x, min_x, max_x)
-    cameraPos.y = clamp(cameraPos.y, min_y, max_y)
-    cameraPos.z = clamp(cameraPos.z, min_z, max_z)
+    cameraPos[0] = clamp(cameraPos[0], min_x, max_x)  # x -> índice 0
+    cameraPos[1] = clamp(cameraPos[1], min_y, max_y)  # y -> índice 1
+    cameraPos[2] = clamp(cameraPos[2], min_z, max_z)  # z -> índice 2
+
 
     if key == 265 and (action==1 or action==2): # tecla seta cima
         shrek.matriz.change_T([shrek.matriz.t[0], shrek.matriz.t[1], shrek.matriz.t[2] - 0.1])
@@ -115,51 +119,41 @@ def mouse_event(window, xpos, ypos):
     yaw += xoffset;
     pitch += yoffset;
 
-    if pitch >= 90.0: pitch = 89.9
-    if pitch <= -90.0: pitch = -89.9
 
-    front = glm.vec3()
-    front.x = math.cos(glm.radians(yaw)) * math.cos(glm.radians(pitch))
-    front.y = math.sin(glm.radians(pitch))
-    front.z = math.sin(glm.radians(yaw)) * math.cos(glm.radians(pitch))
-    cameraFront = glm.normalize(front)
+
+
+    pitch = clamp(pitch, -60.0, 60.0)  # Limitar o pitch
+    front = np.array([
+        math.cos(math.radians(yaw)) * math.cos(math.radians(pitch)),
+        math.sin(math.radians(pitch)),
+        math.sin(math.radians(yaw)) * math.cos(math.radians(pitch))
+    ], dtype=np.float32)
+    cameraFront = normalize(front)
+
+
+
+
 
 
 ### Matrizes Model, View e Projection
 # Teremos uma aula específica para entender o seu funcionamento.
 def model(angle, matriz):
     
-    angle = math.radians(angle)
-    
-    matrix_transform = glm.mat4(1.0) # instanciando uma matriz identidade
-
-    
-    # aplicando translacao
-    matrix_transform = glm.translate(matrix_transform, glm.vec3(matriz.t[0], matriz.t[1], matriz.t[2]))
-    
-    # aplicando rotacao
-    matrix_transform = glm.rotate(matrix_transform, angle, glm.vec3(matriz.r[0], matriz.r[1], matriz.r[2]))
-    
-    # aplicando escala
-    matrix_transform = glm.scale(matrix_transform, glm.vec3(matriz.s[0], matriz.s[1], matriz.s[2]))
-    
-    matrix_transform = np.array(matrix_transform) # pegando a transposta da matriz (glm trabalha com ela invertida)
+    matrix_transform = mat4_identity()
+    matrix_transform = translate(matrix_transform, matriz.t)
+    matrix_transform = rotate(matrix_transform, angle, matriz.r)
+    matrix_transform = scale(matrix_transform, matriz.s)
     
     return matrix_transform
 
 def view():
-    global cameraPos, cameraFront, cameraUp
-    mat_view = glm.lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-    mat_view = np.array(mat_view)
-    return mat_view
+    return lookAt(cameraPos, cameraPos + normalize(cameraFront), cameraUp)
+
 
 def projection():
     global altura, largura, inc_fov, inc_near, inc_far
     # perspective parameters: fovy, aspect, near, far
-    mat_projection = glm.perspective(glm.radians(45.0), largura/altura, 0.1, 2000.0)
-    mat_projection = np.array(mat_projection)    
-    return mat_projection
-
+    return perspective(45.0, largura / altura, 0.1, 1000.0)
 
 ### Inicializando janela
 glfw.init()
@@ -444,9 +438,9 @@ glVertexAttribPointer(loc_normals_coord, 3, GL_FLOAT, False, stride, offset)
 # * Usei as teclas A, S, D e W para movimentação no espaço tridimensional
 # * Usei a posição do mouse para "direcionar" a câmera
 
-cameraPos   = glm.vec3(-30.0,  5.0,  30.0);
-cameraFront = glm.vec3(0.0,  0.0, -1.0);
-cameraUp    = glm.vec3(0.0,  1.0,  0.0);
+cameraPos = np.array([-30.0, 5.0, 30.0], dtype=np.float32)
+cameraFront = np.array([0.0, 0.0, -1.0], dtype=np.float32)
+cameraUp = np.array([0.0, 1.0, 0.0], dtype=np.float32)
 
 polygonal_mode = False
 
